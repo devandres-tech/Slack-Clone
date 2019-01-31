@@ -1,0 +1,26 @@
+{
+  "name": "slack-clone-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --exec babel-node index.js"
+  },
+  "author": "Andres Alcocer",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-3": "^6.24.1",
+    "eslint": "^5.12.1",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "nodemon": "^1.18.9"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.3.3",
+    "express": "^4.16.4",
+    "graphql": "^14.1.1",
+    "graphql-tools": "^4.0.4"
+  }
+}
