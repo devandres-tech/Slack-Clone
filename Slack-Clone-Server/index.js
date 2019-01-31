@@ -19,6 +19,10 @@ const app = express();
 const server = new ApolloServer({ schema });
 server.applyMiddleware({ app });
 
-app.listen(process.env.PORT, () => {
-  console.log(`🚀 Server ready at http://localhost:${process.env.PORT}/graphql`);
+// sync() will create all tables if they doesn't exist in database
+// before running the sever
+models.sequelize.sync().then(() => {
+  app.listen(process.env.PORT, () => {
+    console.log(`🚀 Server ready at http://localhost:${process.env.PORT}/graphql`);
+  });
 });
