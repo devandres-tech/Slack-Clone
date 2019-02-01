@@ -6,5 +6,7 @@ export default `
     channel: [Channel!]!
   }
 
-  
+  type Mutation {
+    createTeam(name: String!): Boolean!
+  }
 `;
