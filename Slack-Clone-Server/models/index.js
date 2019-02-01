@@ -2,13 +2,16 @@ import Sequelize from 'sequelize';
 
 const sequelize = new Sequelize('slack', 'postgres', 'barcelona10', {
   dialect: 'postgres',
+  define: {
+    underscored: true,
+  },
 });
 
 const models = {
   // models
   User: sequelize.import('./user'),
   Channel: sequelize.import('./channel'),
-  Messages: sequelize.import('./messages'),
+  Message: sequelize.import('./message'),
   Team: sequelize.import('./team'),
 };
 

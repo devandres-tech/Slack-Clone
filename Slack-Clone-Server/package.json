@@ -20,6 +20,7 @@
   "dependencies": {
     "apollo-server-express": "^2.3.3",
     "dotenv": "^6.2.0",
+    "merge-graphql-schemas": "^1.5.8",
     "express": "^4.16.4",
     "graphql": "^14.1.1",
     "graphql-tools": "^4.0.4",
