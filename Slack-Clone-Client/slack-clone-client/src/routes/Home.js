@@ -3,7 +3,7 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 
-const allUsersQuery = gql`
+const GET_ALL_USERS = gql`
   {
     getAllUsers {
       id
@@ -14,11 +14,11 @@ const allUsersQuery = gql`
 `;
 
 const Home = () => (
-  <Query query={allUsersQuery}>
+  <Query query={GET_ALL_USERS}>
     {({ loading, data }) => {
       if (loading) return 'loading';
       const { getAllUsers } = data;
-      return getAllUsers.map(u => <h1 key={u.id}>{u.email}</h1>);
+      return getAllUsers.map(u => <h1 key={u.id}>{u.username}</h1>);
     }}
   </Query>
 );
