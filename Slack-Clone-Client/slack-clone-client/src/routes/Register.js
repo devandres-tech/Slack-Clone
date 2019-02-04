@@ -4,18 +4,17 @@ import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 
 
-
 /** Register our Mutations */
 const REGISTER_MUTATION = gql`
-  mutation register($username: String!, $email: String!, $password: String!) {
-    register(username: $username, email: $email, password: $password) {
-      ok
-      errors {
-        path
-        message
-      }
+mutation register($username: String!, $email: String!, $password: String!) {
+  register(username: $username, email: $email, password: $password) {
+    ok
+    errors {
+      path
+      message
     }
   }
+}
 `;
 
 
@@ -45,17 +44,17 @@ export default class Register extends Component {
       usernameError: '',
       emailError: '',
       passwordError: '',
-    }); 
+    });
 
     const { username, email, password } = this.state;
     const response = await register({ variables: { username, email, password } });
-    // Get our errors from backend 
+    // Get our errors from backend
     const { ok, errors } = response.data.register;
     if (ok) {
       this.props.history.push('/');
     } else {
       const err = {};
-      errors.forEach(({path, message}) => {
+      errors.forEach(({ path, message }) => {
         // err['passwordError'] = 'too long...'
         err[`${path}Error`] = message;
       });
@@ -64,10 +63,17 @@ export default class Register extends Component {
     console.log(response);
   }
 
-  render() { 
-    const { username, email, password, usernameError, emailError, passwordError } = this.state;
+  render() {
+    const {
+      username,
+      email,
+      password,
+      usernameError,
+      emailError,
+      passwordError,
+    } = this.state;
 
-    const errorList = []; 
+    const errorList = [];
     if (usernameError) {
       errorList.push(usernameError);
     }
@@ -91,15 +97,17 @@ export default class Register extends Component {
                   onChange={this.onChange}
                   value={username}
                   fluid
-                  placeholder="Username" />
-                  
+                  placeholder="Username"
+                />
+
                 <Input
                   error={!!emailError}
                   name="email"
                   onChange={this.onChange}
                   value={email}
                   fluid
-                  placeholder="Email" />
+                  placeholder="Email"
+                />
 
                 <Input
                   error={!!passwordError}
@@ -108,24 +116,23 @@ export default class Register extends Component {
                   fluid
                   name="password"
                   type="password"
-                  placeholder="Password" />
-                <Button onClick={() => this.onSubmit(register)} >Submit</Button>
+                  placeholder="Password"
+                />
+
+                <Button onClick={() => this.onSubmit(register)}>Submit</Button>
 
                 {usernameError || emailError || passwordError ? (
                   <Message
                     error
-                    header='There was some errors with your submission'
+                    header="There was some errors with your submission"
                     list={errorList}
                   />
                 ) : null}
               </Container>
             </div>
-          )
-          
+          );
         }}
       </Mutation>
     );
   }
 }
-
-

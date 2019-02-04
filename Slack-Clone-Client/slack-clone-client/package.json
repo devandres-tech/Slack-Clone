@@ -9,6 +9,8 @@
     "apollo-link-http": "^1.5.11",
     "graphql": "^14.1.1",
     "graphql-tag": "^2.10.1",
+    "mobx": "^5.9.0",
+    "mobx-react": "^5.4.3",
     "react": "^16.7.0",
     "react-apollo": "^2.4.1",
     "react-dom": "^16.7.0",
