@@ -31,7 +31,14 @@ export default observer(class Login extends Component {
 
   onSubmit = async (createTeam) => {
     const { name } = this;
-    const response = await createTeam({ variables: { name } });
+    let response = null;
+
+    try {
+      response = await createTeam({ variables: { name } });
+    } catch (err) {
+      this.props.history.push('/login');
+      return;
+    }
     const { ok, errors } = response.data.createTeam;
 
     if (ok) {
