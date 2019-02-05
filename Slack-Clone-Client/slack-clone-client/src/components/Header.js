@@ -4,7 +4,8 @@ import { Header } from 'semantic-ui-react';
 export default ({ channelName }) => (
   <div className="header">
     <Header textAlign="center">
-      # My Channel Name
+      #
+      {channelName}
     </Header>
   </div>
 );

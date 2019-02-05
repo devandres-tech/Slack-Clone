@@ -3,6 +3,6 @@ import { Input } from 'semantic-ui-react';
 
 export default ({ channelName }) => (
   <div className="sendMessage">
-    <Input fluid placeholder="mychannel name..." />
+    <Input fluid placeholder={`Message #${channelName}`} />
   </div>
 );
