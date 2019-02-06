@@ -1,6 +1,6 @@
 
 import React from 'react';
-// import Teams from './Teams';
+import { Icon } from 'semantic-ui-react';
 
 const channel = ({ id, name }) => (
   <li key={`channel-${id}`}>
@@ -11,7 +11,7 @@ const channel = ({ id, name }) => (
 const user = ({ id, name }) => <li key={`user-${id}`}>{name}</li>;
 
 export default ({
-  teamName, username, channels, users,
+  teamName, username, channels, users, onAddChannelClick,
 }) => (
     <div className="channels">
       <div>
@@ -21,7 +21,11 @@ export default ({
       </div>
       <div>
         <ul>
-          <li>Channels</li>
+          <li>
+            Channels
+            {' '}
+            <Icon onClick={onAddChannelClick} name="plus circle" />
+          </li>
           {channels.map(channel)}
         </ul>
       </div>
