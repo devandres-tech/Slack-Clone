@@ -6,15 +6,9 @@ import SendMessage from '../components/SendMessage';
 import Sidebar from '../containers/Sidebar';
 
 
-export default () => (
+const ViewTeam = ({ match: { params } }) => (
   <div className="app-layout">
-    {/* <Channels
-      teamName="Team name"
-      username="Username"
-      channels={[{ id: 1, name: 'general' }, { id: 2, name: 'random' }]}
-      users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'user1' }]}
-    /> */}
-    <Sidebar currentTeamId={7} className="channels" />
+    <Sidebar currentTeamId={params.teamId} className="channels" />
     <Header channelName="general" />
     <Messages>
       <ul>
@@ -25,3 +19,5 @@ export default () => (
     <SendMessage channelName="general" />
   </div>
 );
+
+export default ViewTeam;
