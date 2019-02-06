@@ -1,23 +1,55 @@
 import React from 'react';
 import {
-  Button, Header, Modal, Input, Form,
+  Button, Modal, Input, Form,
 } from 'semantic-ui-react';
+import { withFormik } from 'formik';
+import gql from 'graphql-tag';
+import { Mutation } from 'react-apollo';
 
-const AddChannelModal = ({ open, onClose }) => (
+const CREATE_CHANNEL_MUTATION = gql`
+  mutation createChannel($teamId: Int!, $name: String!) {
+  createChannel(teamId:$teamId, name:$name) 
+}
+`;
+
+const AddChannelModal = ({
+  open,
+  onClose,
+  values,
+  handleChange,
+  handleBlur,
+  handleSubmit,
+  isSubmitting,
+}) => (
   <Modal open={open} onClose={onClose}>
-    <Modal.Header>Add Channel</Modal.Header>
-    <Modal.Content>
-      <Form>
-        <Form.Field>
-          <Input fluid placeholder="channel name" />
-        </Form.Field>
-        <Form.Group widths="equal" className="center">
-          <Button>Create Channel</Button>
-          <Button>Channel</Button>
-        </Form.Group>
-      </Form>
-    </Modal.Content>
-  </Modal>
+      <Modal.Header>Add Channel</Modal.Header>
+      <Modal.Content>
+        <Form>
+          <Form.Field>
+            <Input
+              name="name"
+              value={values.name}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              fluid
+              placeholder="channel name"
+            />
+          </Form.Field>
+          <Form.Group widths="equal" className="center">
+            <Button type="button" onClick={handleSubmit}>Create Channel</Button>
+            <Button disabled={isSubmitting} onClick={onClose} type="button">Cancel</Button>
+          </Form.Group>
+        </Form>
+      </Modal.Content>
+    </Modal>
 );
 
-export default AddChannelModal;
+export default withFormik({
+  mapPropsToValues: () => ({ name: '' }),
+  handleSubmit: async (values, { props: { teamId, createChannel }, setSubmitting }) => {
+    const response = await createChannel({ variables: { teamId, name: values.name } });
+    console.log(response);
+    setSubmitting(false);
+  },
+  displayName: 'BasicForm',
+})(AddChannelModal);
