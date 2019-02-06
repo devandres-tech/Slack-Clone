@@ -7,24 +7,18 @@ import decode from 'jwt-decode';
 import Channels from '../components/Channels';
 import Teams from '../components/Teams';
 import AddChannelModal from '../components/UI/AddChannelModal';
+import { GET_ALL_TEAMS } from '../graphql/team';
 
 
-const GET_ALL_TEAMS = gql`
-{
-  allTeams {
-    id
-    name
-    channels {
+const CREATE_CHANNEL_MUTATION = gql`
+  mutation createChannel($teamId: Int!, $name: String!) {
+  createChannel(teamId:$teamId, name:$name) {
+    ok
+    channel {
       id
       name
     }
   }
-}
-`;
-
-const CREATE_CHANNEL_MUTATION = gql`
-  mutation createChannel($teamId: Int!, $name: String!) {
-  createChannel(teamId:$teamId, name:$name) 
 }
 `;
 
@@ -80,11 +74,26 @@ export default class Sidebar extends Component {
                 channels={team.channels}
                 users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'user1' }]}
               />
-              <Mutation mutation={CREATE_CHANNEL_MUTATION}>
+              <Mutation
+                mutation={CREATE_CHANNEL_MUTATION}
+                update={(cache, { data: { createChannel } }) => {
+                  const { ok, channel } = createChannel;
+                  if (!ok) {
+                    return;
+                  }
+                  const response = cache.readQuery({ query: GET_ALL_TEAMS });
+                  const channelToUpdate = response.allTeams[teamIdx].channels;
+
+                  cache.writeQuery({
+                    query: GET_ALL_TEAMS,
+                    data: channelToUpdate.push(channel),
+                  });
+                }}
+              >
                 {createChannel => (
                   <AddChannelModal
                     createChannel={createChannel}
-                    teamId={parseInt(currentTeamId, 10)}
+                    teamId={team.id}
                     onClose={this.handleCloseAddChannelModal}
                     open={openAddChannelModal}
                     key="sidebar-add-channel-modal"

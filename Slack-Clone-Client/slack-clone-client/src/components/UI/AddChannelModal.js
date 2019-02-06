@@ -3,14 +3,6 @@ import {
   Button, Modal, Input, Form,
 } from 'semantic-ui-react';
 import { withFormik } from 'formik';
-import gql from 'graphql-tag';
-import { Mutation } from 'react-apollo';
-
-const CREATE_CHANNEL_MUTATION = gql`
-  mutation createChannel($teamId: Int!, $name: String!) {
-  createChannel(teamId:$teamId, name:$name) 
-}
-`;
 
 const AddChannelModal = ({
   open,
@@ -46,9 +38,10 @@ const AddChannelModal = ({
 
 export default withFormik({
   mapPropsToValues: () => ({ name: '' }),
-  handleSubmit: async (values, { props: { teamId, createChannel }, setSubmitting }) => {
+  handleSubmit: async (values, { props: { onClose, teamId, createChannel }, setSubmitting }) => {
     const response = await createChannel({ variables: { teamId, name: values.name } });
     console.log(response);
+    onClose();
     setSubmitting(false);
   },
   displayName: 'BasicForm',
