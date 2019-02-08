@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { Query } from 'react-apollo';
 import findIndex from 'lodash/findIndex';
 
@@ -14,9 +15,16 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
     {({ loading, data: { allTeams } }) => {
       if (loading) return null;
 
-      const teamIdx = teamId ? findIndex(allTeams, ['id', parseInt(teamId, 10)]) : 0;
+      if (!allTeams.length) {
+        return (<Redirect to="/create-team" />);
+      }
+
+      const teamIdInteger = parseInt(teamId, 10);
+      const teamIdx = teamIdInteger ? findIndex(allTeams, ['id', teamIdInteger]) : 0;
       const currentTeam = allTeams[teamIdx];
-      const channelIdx = channelId ? findIndex(currentTeam.channels, ['id', parseInt(channelId, 10)]) : 0;
+
+      const channelIdInteger = parseInt(channelId, 10);
+      const channelIdx = channelIdInteger ? findIndex(currentTeam.channels, ['id', channelIdInteger]) : 0;
       const currentChannel = currentTeam.channels[channelIdx];
 
       return (
@@ -30,14 +38,16 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
             teamIdx={teamIdx}
             className="channels"
           />
-          <Header channelName={currentChannel.name} />
-          <Messages channelId={currentChannel.id}>
-            <ul>
-              <li />
-              <li />
-            </ul>
-          </Messages>
-          <SendMessage channelName={currentChannel.name} />
+          {currentChannel && <Header channelName={currentChannel.name} />}
+          {currentChannel && (
+            <Messages channelId={currentChannel.id}>
+              <ul>
+                <li />
+                <li />
+              </ul>
+            </Messages>
+          )}
+          {currentChannel && <SendMessage channelName={currentChannel.name} />}
         </div>
       );
     }}

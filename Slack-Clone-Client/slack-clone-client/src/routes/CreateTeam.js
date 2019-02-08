@@ -7,6 +7,7 @@ import {
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
+
 const CREATE_TEAM_MUTATION = gql`
  mutation createTeam($name: String!) {
   createTeam(name:$name) {
@@ -32,6 +33,9 @@ export default observer(class Login extends Component {
     });
   }
 
+  /**
+   * Submits the form
+   */
   onSubmit = async (createTeam) => {
     const { name } = this;
     let response = null;
@@ -45,17 +49,14 @@ export default observer(class Login extends Component {
     const { ok, errors, team } = response.data.createTeam;
 
     if (ok) {
-      this.props.history.push(`/view-team/${team.id}`);
+      this.props.history.push(`view-team/${team.id}`);
     } else {
       const err = {};
       errors.forEach(({ path, message }) => {
-        // err['passwordError'] = 'too long...'
         err[`${path}Error`] = message;
       });
       this.errors = err;
     }
-
-    console.log(response);
   };
 
   onChange = (e) => {
