@@ -1,19 +1,22 @@
 
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
-const channel = ({ id, name }) => (
-  <li key={`channel-${id}`}>
-    #
-    {name}
-  </li>
+const channel = ({ id, name }, teamId) => (
+  <Link key={`channel-${id}`} to={`/view-team/${teamId}/${id}`}>
+    <li>
+      #
+      {name}
+    </li>
+  </Link>
 );
 const user = ({ id, name }) => <li key={`user-${id}`}>{name}</li>;
 
 export default ({
-  teamName, username, channels, users, onAddChannelClick,
+  teamName, username, channels, users, onAddChannelClick, teamId, onInvitePeopleClick,
 }) => (
-    <div className="channels">
+  <div className="channels">
       <div>
         {teamName}
         --
@@ -26,7 +29,7 @@ export default ({
             {' '}
             <Icon onClick={onAddChannelClick} name="plus circle" />
           </li>
-          {channels.map(channel)}
+          {channels.map(c => channel(c, teamId))}
         </ul>
       </div>
       <div>
@@ -35,5 +38,10 @@ export default ({
           {users.map(user)}
         </ul>
       </div>
+      <div>
+        <a href="#invite-people" onClick={onInvitePeopleClick}>
+          + Invite People
+        </a>
+      </div>
     </div>
-  );
+);
