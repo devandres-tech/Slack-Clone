@@ -7,7 +7,7 @@ import Channels from '../components/Channels';
 import Teams from '../components/Teams';
 import AddChannelModal from '../components/UI/AddChannelModal';
 import InvitePeopleModal from '../components/UI/InvitePeopleModal';
-import { GET_ALL_TEAMS } from '../graphql/team';
+import { GET_ALL_TEAMS } from '../graphql-queries/team';
 
 
 const CREATE_CHANNEL_MUTATION = gql`
@@ -58,10 +58,12 @@ export default class Sidebar extends Component {
     const { openAddChannelModal, openInvitePeopleModal } = this.state;
 
     let username = '';
+    let isOwner = false;
     try {
       const token = localStorage.getItem('token');
       const { user } = decode(token);
       username = user.username;
+      isOwner = user.id === team.owner;
     } catch (err) { }
 
     return (
@@ -71,6 +73,7 @@ export default class Sidebar extends Component {
           onAddChannelClick={this.handleAddChanelClick}
           teamName={team.name}
           username={username}
+          isOwner={isOwner}
           teamId={team.id}
           onInvitePeopleClick={this.handleInvitePeopleClick}
           channels={team.channels}

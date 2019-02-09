@@ -2,7 +2,7 @@ export default `
 
   type Team {
     id: Int!
-    owner: User!
+    owner: Int!
     name: String!
     member: [User!]!
     channels: [Channel!]!
@@ -16,6 +16,7 @@ export default `
 
   type Query {
     allTeams: [Team!]!
+    inviteTeams: [Team!]!
   }
 
   type VoidResponse {

@@ -14,9 +14,9 @@ const channel = ({ id, name }, teamId) => (
 const user = ({ id, name }) => <li key={`user-${id}`}>{name}</li>;
 
 export default ({
-  teamName, username, channels, users, onAddChannelClick, teamId, onInvitePeopleClick,
+  teamName, username, channels, users, onAddChannelClick, teamId, onInvitePeopleClick, isOwner,
 }) => (
-  <div className="channels">
+    <div className="channels">
       <div>
         {teamName}
         --
@@ -27,7 +27,7 @@ export default ({
           <li>
             Channels
             {' '}
-            <Icon onClick={onAddChannelClick} name="plus circle" />
+            {isOwner && <Icon onClick={onAddChannelClick} name="plus circle" />}
           </li>
           {channels.map(c => channel(c, teamId))}
         </ul>
@@ -38,10 +38,12 @@ export default ({
           {users.map(user)}
         </ul>
       </div>
-      <div>
-        <a href="#invite-people" onClick={onInvitePeopleClick}>
-          + Invite People
-        </a>
-      </div>
+      {isOwner && (
+        <div>
+          <a href="#invite-people" onClick={onInvitePeopleClick}>
+            + Invite People
+          </a>
+        </div>
+      )}
     </div>
-);
+  );
