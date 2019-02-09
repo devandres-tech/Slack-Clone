@@ -4,24 +4,10 @@ import { extendObservable } from 'mobx';
 import {
   Button, Input, Container, Header, Form, Message,
 } from 'semantic-ui-react';
-import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 
+import { CREATE_TEAM_MUTATION } from '../graphql/team';
 
-const CREATE_TEAM_MUTATION = gql`
- mutation createTeam($name: String!) {
-  createTeam(name:$name) {
-    ok
-    team {
-      id
-    }
-    errors {
-      path
-      message
-    }
-  }
-}
-`;
 
 export default observer(class Login extends Component {
   constructor(props) {

@@ -4,22 +4,9 @@ import { extendObservable } from 'mobx';
 import {
   Button, Input, Container, Header, Form, Message,
 } from 'semantic-ui-react';
-import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
+import { LOGIN_MUTATION } from '../graphql/user';
 
-const LOGIN_MUTATION = gql`
-  mutation login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      ok
-      token
-      refreshToken
-      errors {
-        path
-        message
-      }
-    }
-  }
-`;
 
 export default observer(class Login extends Component {
   constructor(props) {

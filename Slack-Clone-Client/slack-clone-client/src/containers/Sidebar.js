@@ -1,38 +1,13 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
 import decode from 'jwt-decode';
 
 import Channels from '../components/Channels';
 import Teams from '../components/Teams';
 import AddChannelModal from '../components/UI/AddChannelModal';
 import InvitePeopleModal from '../components/UI/InvitePeopleModal';
-import { GET_ALL_TEAMS } from '../graphql-queries/team';
-
-
-const CREATE_CHANNEL_MUTATION = gql`
-  mutation createChannel($teamId: Int!, $name: String!) {
-  createChannel(teamId:$teamId, name:$name) {
-    ok
-    channel {
-      id
-      name
-    }
-  }
-}
-`;
-
-const ADD_TEAM_MEMBER_MUTATION = gql`
-mutation($email: String!, $teamId: Int!) {
-  addTeamMember(email: $email, teamId: $teamId) {
-    ok
-    errors {
-      path
-      message
-    }
-  }
-}
-`;
+import { GET_ALL_TEAMS, ADD_TEAM_MEMBER_MUTATION } from '../graphql/team';
+import { CREATE_CHANNEL_MUTATION } from '../graphql/channel';
 
 
 export default class Sidebar extends Component {

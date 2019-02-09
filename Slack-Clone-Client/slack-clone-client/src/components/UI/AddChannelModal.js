@@ -44,5 +44,4 @@ export default withFormik({
     onClose();
     setSubmitting(false);
   },
-  displayName: 'BasicForm',
 })(AddChannelModal);

@@ -1,13 +1,14 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { Query } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import findIndex from 'lodash/findIndex';
 
 import Header from '../components/Header';
 import Messages from '../components/Messages';
 import SendMessage from '../components/SendMessage';
 import Sidebar from '../containers/Sidebar';
-import { GET_ALL_TEAMS } from '../graphql-queries/team';
+import { GET_ALL_TEAMS } from '../graphql/team';
+import { CREATE_MESSAGE_MUTATION } from '../graphql/message';
 
 
 const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
@@ -52,7 +53,16 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
               </ul>
             </Messages>
           )}
-          {currentChannel && <SendMessage channelName={currentChannel.name} />}
+          {currentChannel && (
+            <Mutation mutation={CREATE_MESSAGE_MUTATION}>
+              {createMessage => (
+                <SendMessage
+                  createMessage={createMessage}
+                  channelName={currentChannel.name}
+                />
+              )}
+            </Mutation>
+          )}
         </div>
       );
     }}

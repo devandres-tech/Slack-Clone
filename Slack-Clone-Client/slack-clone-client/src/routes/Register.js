@@ -3,20 +3,7 @@ import {
   Container, Header, Input, Button, Message, Form,
 } from 'semantic-ui-react';
 import { Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
-
-/** Register our Mutations */
-const REGISTER_MUTATION = gql`
-  mutation register($username: String!, $email: String!, $password: String!) {
-    register(username: $username, email: $email, password: $password) {
-      ok
-      errors {
-        path
-        message
-      }
-    }
-  }
-`;
+import { REGISTER_MUTATION } from '../graphql/user';
 
 export default class Register extends Component {
   constructor(props) {

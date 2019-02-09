@@ -1,17 +1,6 @@
 import React from 'react';
 import { Query } from 'react-apollo';
-import gql from 'graphql-tag';
-
-
-const GET_ALL_USERS = gql`
-  {
-    getAllUsers {
-      id
-      email
-      username
-    }
-  }
-`;
+import { GET_ALL_USERS } from '../graphql/user';
 
 const Home = () => (
   <Query query={GET_ALL_USERS}>
