@@ -6,6 +6,12 @@ import path from 'path';
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
+import bodyParser from 'body-parser';
+import http from 'http';
+import { execute, subscribe } from 'graphql';
+import { PubSub } from 'graphql-subscriptions';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+
 import { refreshTokens } from './auth';
 
 import models from './models';
@@ -61,11 +67,23 @@ const server = new ApolloServer({
 });
 
 server.applyMiddleware({ app });
+const httpServer = http.createServer(app);
+server.installSubscriptionHandlers(httpServer);
 
 // sync() will create all tables if they doesn't exist in database
 // before running the sever
 models.sequelize.sync({}).then(() => {
-  app.listen(process.env.PORT, () => {
-    console.log(`🚀 Server ready at http://localhost:${process.env.PORT}/graphql`);
+  httpServer.listen(process.env.PORT, () => {
+    console.log(`🚀 Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`);
+    console.log(`🚀 Subscriptions ready at ws://localhost:${process.env.PORT}${server.subscriptionsPath}`);
+    //   new SubscriptionServer({
+    //     execute,
+    //     subscribe,
+    //     schema,
+    //   }, {
+    //     server,
+    //     path: '/subscriptions',
+    //   });
+    // });
   });
 });

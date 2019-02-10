@@ -1,6 +1,9 @@
 .messages {
   grid-column: 3;
   grid-row: 2;
+  display: flex;
+  flex-direction: column-reverse;
+  overflow-y: auto;
 
   &>.ui.comments {
     padding-left: 2rem;
