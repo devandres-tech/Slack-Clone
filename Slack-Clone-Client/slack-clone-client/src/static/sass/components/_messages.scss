@@ -1,4 +1,12 @@
 .messages {
   grid-column: 3;
   grid-row: 2;
+
+  &>.ui.comments {
+    padding-left: 2rem;
+  }
+
+  & .content {
+    font-size: 2rem;
+  }
 }

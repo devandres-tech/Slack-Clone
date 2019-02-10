@@ -4,11 +4,11 @@ import { Query, Mutation } from 'react-apollo';
 import findIndex from 'lodash/findIndex';
 
 import Header from '../components/Header';
-import Messages from '../components/Messages';
 import SendMessage from '../components/SendMessage';
 import Sidebar from '../containers/Sidebar';
 import { GET_ALL_TEAMS } from '../graphql/team';
 import { CREATE_MESSAGE_MUTATION } from '../graphql/message';
+import MessageContainer from '../containers/MessageContainer';
 
 
 const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
@@ -22,7 +22,7 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
       if (!allTeamsList.length) {
         return (<Redirect to="/create-team" />);
       }
-      console.log(allTeamsList);
+
       // Gets the current team to display, if no teams then display
       // default team "general"
       const teamIdInteger = parseInt(teamId, 10);
@@ -46,17 +46,13 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
           />
           {currentChannel && <Header channelName={currentChannel.name} />}
           {currentChannel && (
-            <Messages channelId={currentChannel.id}>
-              <ul>
-                <li />
-                <li />
-              </ul>
-            </Messages>
+            <MessageContainer channelId={currentChannel.id} />
           )}
           {currentChannel && (
             <Mutation mutation={CREATE_MESSAGE_MUTATION}>
               {createMessage => (
                 <SendMessage
+                  channelId={currentChannel.id}
                   createMessage={createMessage}
                   channelName={currentChannel.name}
                 />

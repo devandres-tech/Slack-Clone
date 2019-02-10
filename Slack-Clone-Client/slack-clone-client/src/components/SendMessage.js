@@ -20,6 +20,7 @@ const SendMessage = ({
         }}
         value={values.message}
         fluid
+        name="message"
         onChange={handleChange}
         onBlur={handleBlur}
         placeholder={`Message #${channelName}`}
@@ -29,14 +30,13 @@ const SendMessage = ({
 
 export default withFormik({
   mapPropsToValues: () => ({ message: '' }),
-  handleSubmit: async (values, { props: { onClose, teamId, createMessage }, setSubmitting }) => {
+  handleSubmit: async (values, { props: { channelId, createMessage }, setSubmitting, resetForm }) => {
     if (!values.message || !values.message.trim()) {
       setSubmitting(false);
       return;
     }
-    const response = await createMessage({ variables: { teamId, name: values.name } });
+    const response = await createMessage({ variables: { channelId, text: values.message } });
     console.log(response);
-    onClose();
-    setSubmitting(false);
+    resetForm(false);
   },
 })(SendMessage);
