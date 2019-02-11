@@ -13,7 +13,7 @@ import MessageContainer from '../containers/MessageContainer';
 
 const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
   <Query query={GET_ALL_TEAMS}>
-    {({ loading, data: { allTeams, inviteTeams } }) => {
+    {({ loading, subscribeToMore, data: { allTeams, inviteTeams } }) => {
       if (loading) return null;
 
       // merge owner teams and teams he got invited to

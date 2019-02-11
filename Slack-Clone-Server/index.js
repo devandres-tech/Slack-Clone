@@ -9,7 +9,6 @@ import jwt from 'jsonwebtoken';
 import bodyParser from 'body-parser';
 import http from 'http';
 import { execute, subscribe } from 'graphql';
-import { PubSub } from 'graphql-subscriptions';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 
 import { refreshTokens } from './auth';
@@ -58,9 +57,9 @@ app.use(addUser);
 
 const server = new ApolloServer({
   schema,
-  context: ({ req }) => ({
+  context: async ({ req, connection }) => ({
     models,
-    user: req.user,
+    user: connection ? connection.context : req.user,
     SECRET,
     SECRET2,
   }),
@@ -76,14 +75,5 @@ models.sequelize.sync({}).then(() => {
   httpServer.listen(process.env.PORT, () => {
     console.log(`🚀 Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`);
     console.log(`🚀 Subscriptions ready at ws://localhost:${process.env.PORT}${server.subscriptionsPath}`);
-    //   new SubscriptionServer({
-    //     execute,
-    //     subscribe,
-    //     schema,
-    //   }, {
-    //     server,
-    //     path: '/subscriptions',
-    //   });
-    // });
   });
 });
