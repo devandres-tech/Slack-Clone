@@ -39,7 +39,6 @@ export default {
           userId: user.id,
         });
 
-        console.log('hello i am in message query...');
 
         const asyncFunc = async () => {
           const currentUser = await models.User.findOne({

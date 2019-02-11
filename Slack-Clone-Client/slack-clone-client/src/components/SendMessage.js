@@ -35,8 +35,7 @@ export default withFormik({
       setSubmitting(false);
       return;
     }
-    const response = await createMessage({ variables: { channelId, text: values.message } });
-    console.log(response);
+    await createMessage({ variables: { channelId, text: values.message } });
     resetForm(false);
   },
 })(SendMessage);

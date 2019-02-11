@@ -6,10 +6,8 @@ import path from 'path';
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
-import bodyParser from 'body-parser';
 import http from 'http';
-import { execute, subscribe } from 'graphql';
-import { SubscriptionServer } from 'subscriptions-transport-ws';
+
 
 import { refreshTokens } from './auth';
 

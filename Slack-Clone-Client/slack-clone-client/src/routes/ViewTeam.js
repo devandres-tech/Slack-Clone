@@ -7,13 +7,13 @@ import Header from '../components/Header';
 import SendMessage from '../components/SendMessage';
 import Sidebar from '../containers/Sidebar';
 import { GET_ALL_TEAMS } from '../graphql/team';
-import { CREATE_MESSAGE_MUTATION } from '../graphql/message';
+import { CREATE_MESSAGE_MUTATION, GET_MESSAGES } from '../graphql/message';
 import MessageContainer from '../containers/MessageContainer';
 
 
 const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
   <Query query={GET_ALL_TEAMS}>
-    {({ loading, subscribeToMore, data: { allTeams, inviteTeams } }) => {
+    {({ loading, data: { allTeams, inviteTeams } }) => {
       if (loading) return null;
 
       // merge owner teams and teams he got invited to
@@ -46,7 +46,16 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
           />
           {currentChannel && <Header channelName={currentChannel.name} />}
           {currentChannel && (
-            <MessageContainer channelId={currentChannel.id} />
+            <Query query={GET_MESSAGES} variables={{ channelId: currentChannel.id }}>
+              {({ loading, subscribeToMore, data }) => {
+                console.log();
+                if (loading) return 'loaing...';
+                return (
+                  <MessageContainer channelId={currentChannel.id} data={data} subscribeToMore={subscribeToMore} />
+                );
+              }}
+
+            </Query>
           )}
           {currentChannel && (
             <Mutation mutation={CREATE_MESSAGE_MUTATION}>
