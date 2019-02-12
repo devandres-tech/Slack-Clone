@@ -2,17 +2,6 @@ import formatErrors from '../FormatErrors';
 import requiresAuth from '../permissions';
 
 export default {
-  Query: {
-    // Get all teams created by the owner
-    allTeams: requiresAuth.createResolver(async (parent, args, { models, user }) =>
-      models.Team.findAll({ where: { owner: user.id } }, { raw: true })),
-    // Get all teams the user was invited to
-    inviteTeams: requiresAuth.createResolver(async (parent, args, { models, user }) =>
-      models.sequelize.query('select * from teams join members on id = team_id where user_id = ?', {
-        replacements: [user.id],
-        model: models.Team,
-      })),
-  },
   Mutation: {
     createTeam: requiresAuth.createResolver(async (parent, args, { models, user }) => {
       try {
@@ -21,6 +10,7 @@ export default {
             const team = await models.Team.create({ ...args, owner: user.id });
             // Create default channel for every team created
             await models.Channel.create({ name: 'general', public: true, teamId: team.id });
+            await models.Member.create({ teamId: team.id, userId: user.id, admin: true });
             return team;
           },
         );

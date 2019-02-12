@@ -6,28 +6,28 @@ import findIndex from 'lodash/findIndex';
 import Header from '../components/Header';
 import SendMessage from '../components/SendMessage';
 import Sidebar from '../containers/Sidebar';
-import { GET_ALL_TEAMS } from '../graphql/team';
+import { GET_ME_QUERY } from '../graphql/team';
 import { CREATE_MESSAGE_MUTATION, GET_MESSAGES } from '../graphql/message';
 import MessageContainer from '../containers/MessageContainer';
 
 
 const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
-  <Query query={GET_ALL_TEAMS}>
-    {({ loading, data: { allTeams, inviteTeams } }) => {
+  <Query query={GET_ME_QUERY} fetchPolicy="network-only">
+    {({ loading, data: { me } }) => {
       if (loading) return null;
+      // destructor teams from me query
+      console.log(me);
+      const { teams } = me;
 
-      // merge owner teams and teams he got invited to
-      const allTeamsList = [...allTeams, ...inviteTeams];
-
-      if (!allTeamsList.length) {
+      if (!teams.length) {
         return (<Redirect to="/create-team" />);
       }
 
       // Gets the current team to display, if no teams then display
       // default team "general"
       const teamIdInteger = parseInt(teamId, 10);
-      const teamIdx = teamIdInteger ? findIndex(allTeamsList, ['id', teamIdInteger]) : 0;
-      const currentTeam = teamIdx === -1 ? allTeamsList[0] : allTeamsList[teamIdx];
+      const teamIdx = teamIdInteger ? findIndex(teams, ['id', teamIdInteger]) : 0;
+      const currentTeam = teamIdx === -1 ? teams[0] : teams[teamIdx];
 
       const channelIdInteger = parseInt(channelId, 10);
       const channelIdx = channelIdInteger ? findIndex(currentTeam.channels, ['id', channelIdInteger]) : 0;
@@ -36,7 +36,7 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
       return (
         <div className="app-layout">
           <Sidebar
-            teams={allTeamsList.map(t => ({
+            teams={teams.map(t => ({
               id: t.id,
               letter: t.name.charAt(0).toUpperCase(),
             }))}

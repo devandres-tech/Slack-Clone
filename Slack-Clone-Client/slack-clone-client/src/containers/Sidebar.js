@@ -6,7 +6,7 @@ import Channels from '../components/Channels';
 import Teams from '../components/Teams';
 import AddChannelModal from '../components/UI/AddChannelModal';
 import InvitePeopleModal from '../components/UI/InvitePeopleModal';
-import { GET_ALL_TEAMS, ADD_TEAM_MEMBER_MUTATION } from '../graphql/team';
+import { GET_ME_QUERY, ADD_TEAM_MEMBER_MUTATION } from '../graphql/team';
 import { CREATE_CHANNEL_MUTATION } from '../graphql/channel';
 
 
@@ -61,11 +61,11 @@ export default class Sidebar extends Component {
             if (!ok) {
               return;
             }
-            const response = cache.readQuery({ query: GET_ALL_TEAMS });
-            const channelToUpdate = response.allTeams[teamIdx].channels;
+            const response = cache.readQuery({ query: GET_ME_QUERY });
+            const channelToUpdate = response.me.teams[teamIdx].channels;
 
             cache.writeQuery({
-              query: GET_ALL_TEAMS,
+              query: GET_ME_QUERY,
               data: channelToUpdate.push(channel),
             });
           }}
