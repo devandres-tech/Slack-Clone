@@ -5,24 +5,42 @@ import { MESSAGE_SUBSCRIPTION } from '../graphql/message';
 
 
 class MessageContainer extends Component {
-  componentWillMount() {
-    this.props.subscribeToMore({
-      document: MESSAGE_SUBSCRIPTION,
-      variables: {
-        channelId: this.props.channelId,
-      },
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData) {
-          return prev;
-        }
-
-        return {
-          ...prev,
-          messages: [...prev.messages, subscriptionData.data.newChannelMessage],
-        };
-      },
-    });
+  componentDidMount() {
+    this.unsubscribe = this.subscribe(this.props.channelId);
   }
+
+  componentWillReceiveProps({ channelId }) {
+    if (this.props.channelId !== channelId) {
+      if (this.unsubscribe) {
+        this.unsubscribe();
+      }
+      this.unsubscribe = this.subscribe(channelId);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
+
+  subscribe = channelId => this.props.subscribeToMore({
+    document: MESSAGE_SUBSCRIPTION,
+    variables: {
+      channelId,
+    },
+    updateQuery: (prev, { subscriptionData }) => {
+      if (!subscriptionData) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        messages: [...prev.messages, subscriptionData.data.newChannelMessage],
+      };
+    },
+  });
+
 
   render() {
     const { data } = this.props;

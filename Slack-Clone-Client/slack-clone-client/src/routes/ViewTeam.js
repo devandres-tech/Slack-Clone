@@ -46,12 +46,18 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
           />
           {currentChannel && <Header channelName={currentChannel.name} />}
           {currentChannel && (
-            <Query query={GET_MESSAGES} variables={{ channelId: currentChannel.id }}>
-              {({ loading, subscribeToMore, data }) => {
+            <Query query={GET_MESSAGES} fetchPolicy="network-only" variables={{ channelId: currentChannel.id }}>
+              {({
+                loading, subscribeToMore, refetch, data,
+              }) => {
                 console.log();
                 if (loading) return 'loaing...';
                 return (
-                  <MessageContainer channelId={currentChannel.id} data={data} subscribeToMore={subscribeToMore} />
+                  <MessageContainer
+                    channelId={currentChannel.id}
+                    data={data}
+                    subscribeToMore={subscribeToMore}
+                  />
                 );
               }}
 
