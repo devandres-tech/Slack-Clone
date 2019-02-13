@@ -29,17 +29,18 @@ export default class Sidebar extends Component {
 
 
   render() {
-    const { teams, team, teamIdx } = this.props;
+    const {
+ teams, team, username, teamIdx 
+} = this.props;
     const { openAddChannelModal, openInvitePeopleModal } = this.state;
 
-    let username = '';
-    let isOwner = false;
-    try {
-      const token = localStorage.getItem('token');
-      const { user } = decode(token);
-      username = user.username;
-      isOwner = user.id === team.owner;
-    } catch (err) { }
+    // let username = '';
+    // const isOwner = false;
+    // try {
+    //   const token = localStorage.getItem('token');
+    //   const { user } = decode(token);
+    //   username = user.username;
+    // } catch (err) { }
 
     return (
       <React.Fragment>
@@ -48,7 +49,7 @@ export default class Sidebar extends Component {
           onAddChannelClick={this.handleAddChanelClick}
           teamName={team.name}
           username={username}
-          isOwner={isOwner}
+          isOwner={team.admin}
           teamId={team.id}
           onInvitePeopleClick={this.handleInvitePeopleClick}
           channels={team.channels}

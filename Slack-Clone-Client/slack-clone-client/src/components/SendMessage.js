@@ -4,7 +4,7 @@ import { withFormik } from 'formik';
 
 const ENTER_KEY = 13;
 const SendMessage = ({
-  channelName,
+  placeholder,
   values,
   handleChange,
   handleBlur,
@@ -23,19 +23,19 @@ const SendMessage = ({
         name="message"
         onChange={handleChange}
         onBlur={handleBlur}
-        placeholder={`Message #${channelName}`}
+        placeholder={`Message #${placeholder}`}
       />
     </div>
 );
 
 export default withFormik({
   mapPropsToValues: () => ({ message: '' }),
-  handleSubmit: async (values, { props: { channelId, createMessage }, setSubmitting, resetForm }) => {
+  handleSubmit: async (values, { props: { onSubmit }, setSubmitting, resetForm }) => {
     if (!values.message || !values.message.trim()) {
       setSubmitting(false);
       return;
     }
-    await createMessage({ variables: { channelId, text: values.message } });
+    await onSubmit(values.message);
     resetForm(false);
   },
 })(SendMessage);

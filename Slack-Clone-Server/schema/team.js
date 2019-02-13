@@ -3,6 +3,7 @@ export default `
   type Team {
     id: Int!
     name: String!
+    admin: Boolean!
     member: [User!]!
     channels: [Channel!]!
   }

@@ -58,28 +58,18 @@ const server = new ApolloServer({
   subscriptions: {
     onConnect: async ({ token, refreshToken }, webSocket) => {
       if (token && refreshToken) {
-        let user = null;
         try {
           // verify with same SECRET we used to sign the token
-          const payload = jwt.verify(token, SECRET);
-          user = payload.user;
+          const { user } = jwt.verify(token, SECRET);
+          return { models, user };
         } catch (err) {
           // set new tokens
           const newTokens = await refreshTokens(token, refreshToken, models, SECRET, SECRET2);
-          user = newTokens.user;
+          return { models, user: newTokens.user };
         }
-        if (!user) {
-          throw new Error('Invalid auth tokens');
-        }
-
-        // const member = await models.Member.findOne({ where: { teamId: 1, userId: user.id } });
-        // if (!member) {
-        //   throw new Error('Missing auth tokens!');
-        // }
-        return true;
       }
 
-      throw new Error('Missing auth tokens!');
+      return { models };
     },
   },
   context: async ({ req, connection }) => ({

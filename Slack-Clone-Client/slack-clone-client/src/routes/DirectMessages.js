@@ -11,7 +11,7 @@ import { CREATE_MESSAGE_MUTATION, GET_MESSAGES } from '../graphql/message';
 import MessageContainer from '../containers/MessageContainer';
 
 
-const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
+const ViewTeam = ({ match: { params: { teamId, userId } } }) => (
   <Query query={GET_ME_QUERY} fetchPolicy="network-only">
     {({ loading, data: { me } }) => {
       if (loading) return null;
@@ -30,12 +30,6 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
       const teamIdx = teamIdInteger ? findIndex(teams, ['id', teamIdInteger]) : 0;
       const currentTeam = teamIdx === -1 ? teams[0] : teams[teamIdx];
 
-      const channelIdInteger = parseInt(channelId, 10);
-      console.log();
-      const channelIdx = channelIdInteger ? findIndex(currentTeam.channels, ['id', channelIdInteger]) : 0;
-      const currentChannel = channelIdx === -1 ? currentTeam.channels[0] : currentTeam.channels[channelIdx];
-      console.log('current channel...', currentChannel);
-
       return (
         <div className="app-layout">
           <Sidebar
@@ -48,39 +42,30 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
             username={username}
             className="channels"
           />
-          {currentChannel && <Header channelName={currentChannel.name} />}
-          {currentChannel && (
-            <Query query={GET_MESSAGES} fetchPolicy="network-only" variables={{ channelId: currentChannel.id }}>
-              {({
-                loading, subscribeToMore, data,
-              }) => {
-                console.log();
-                if (loading) return 'loaing...';
-                return (
-                  <MessageContainer
-                    channelId={currentChannel.id}
-                    data={data}
-                    subscribeToMore={subscribeToMore}
-                  />
-                );
-              }}
-
-            </Query>
-          )}
-          {currentChannel && (
-            <Mutation mutation={CREATE_MESSAGE_MUTATION}>
-              {createMessage => (
-                <SendMessage
+          {/* <Header channelName={currentChannel.name} />
+          <Query query={GET_MESSAGES} fetchPolicy="network-only" variables={{ channelId: currentChannel.id }}>
+            {({
+              loading, subscribeToMore, data,
+            }) => {
+              console.log();
+              if (loading) return 'loaing...';
+              return (
+                <MessageContainer
                   channelId={currentChannel.id}
-                  onSubmit={async (text) => {
-                    await createMessage({ variables: { text, channelId: currentChannel.id } });
-                  }}
-                  createMessage={createMessage}
-                  placeholder={currentChannel.name}
+                  data={data}
+                  subscribeToMore={subscribeToMore}
                 />
-              )}
-            </Mutation>
-          )}
+              );
+            }}
+          </Query> */}
+          <Mutation mutation={CREATE_MESSAGE_MUTATION}>
+            {createMessage => (
+              <SendMessage
+                onSubmit={() => { }}
+                placeholder={userId}
+              />
+            )}
+          </Mutation>
         </div>
       );
     }}
