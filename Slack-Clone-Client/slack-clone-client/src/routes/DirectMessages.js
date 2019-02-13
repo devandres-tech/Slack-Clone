@@ -7,8 +7,8 @@ import Header from '../components/Header';
 import SendMessage from '../components/SendMessage';
 import Sidebar from '../containers/Sidebar';
 import { GET_ME_QUERY } from '../graphql/team';
-import { CREATE_MESSAGE_MUTATION, GET_MESSAGES } from '../graphql/message';
-import MessageContainer from '../containers/MessageContainer';
+import { CREATE_DIRECT_MESSAGE_MUTATION, GET_DIRECT_MESSAGES } from '../graphql/message';
+import DirectMessageContainer from '../containers/DirectMessageContainer';
 
 
 const ViewTeam = ({ match: { params: { teamId, userId } } }) => (
@@ -23,7 +23,10 @@ const ViewTeam = ({ match: { params: { teamId, userId } } }) => (
       if (!teams.length) {
         return (<Redirect to="/create-team" />);
       }
-
+      // convert our id's to integers
+      const teamIdInt = parseInt(teamId, 10);
+      const userIdInt = parseInt(userId, 10);
+      console.log('ids...', teamIdInt, userIdInt);
       // Gets the current team to display, if no teams then display
       // default team "general"
       const teamIdInteger = parseInt(teamId, 10);
@@ -42,26 +45,25 @@ const ViewTeam = ({ match: { params: { teamId, userId } } }) => (
             username={username}
             className="channels"
           />
-          {/* <Header channelName={currentChannel.name} />
-          <Query query={GET_MESSAGES} fetchPolicy="network-only" variables={{ channelId: currentChannel.id }}>
-            {({
-              loading, subscribeToMore, data,
-            }) => {
-              console.log();
-              if (loading) return 'loaing...';
+          <Header channelName="some username" />
+          <Query query={GET_DIRECT_MESSAGES} fetchPolicy="network-only" variables={{ teamId: teamIdInt, otherUserId: userIdInt }}>
+            {({ loading, data }) => {
+              console.log(data);
+              if (loading) return loading;
               return (
-                <MessageContainer
-                  channelId={currentChannel.id}
-                  data={data}
-                  subscribeToMore={subscribeToMore}
-                />
+                <DirectMessageContainer data={data} />
               );
             }}
-          </Query> */}
-          <Mutation mutation={CREATE_MESSAGE_MUTATION}>
-            {createMessage => (
+          </Query>
+          <Mutation mutation={CREATE_DIRECT_MESSAGE_MUTATION}>
+            {createDirectMessage => (
               <SendMessage
-                onSubmit={() => { }}
+                onSubmit={async (text) => {
+                  const response = await createDirectMessage({
+                    variables: { text, receiverId: userIdInt, teamId: teamIdInt },
+                  });
+                  console.log(response);
+                }}
                 placeholder={userId}
               />
             )}

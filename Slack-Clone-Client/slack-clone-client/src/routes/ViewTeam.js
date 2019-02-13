@@ -54,7 +54,6 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
               {({
                 loading, subscribeToMore, data,
               }) => {
-                console.log();
                 if (loading) return 'loaing...';
                 return (
                   <MessageContainer
