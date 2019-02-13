@@ -20,25 +20,26 @@ const middlewareLink = setContext(() => ({
 
 
 /** Set our tokens in our headers so the server can verify user */
-const afterwareLink = new ApolloLink((operation, forward) => {
-  // get our context from our middleware link
-  const { headers } = operation.getContext();
+const afterwareLink = new ApolloLink((operation, forward) => forward(operation).map((response) => {
+    // get our context from our middleware link
+    const { response: { headers } } = operation.getContext();
+    console.log('headers...', headers);
+    if (headers) {
+      const token = headers.get('x-token');
+      const refreshToken = headers.get('x-refresh-token');
+      console.log(token);
+      console.log(refreshToken);
 
-  if (headers) {
-    const token = headers.get('x-token');
-    const refreshToken = headers.get('x-refresh-token');
+      if (token) {
+        localStorage.setItem('token', token);
+      }
 
-    if (token) {
-      localStorage.setItem('token', token);
+      if (refreshToken) {
+        localStorage.setItem('refreshToken', refreshToken);
+      }
     }
-
-    if (refreshToken) {
-      localStorage.setItem('refreshToken', refreshToken);
-    }
-  }
-
-  return forward(operation);
-});
+    return response;
+  }));
 
 /** Build our regular link */
 const httpLinkWithMiddleware = afterwareLink.concat(middlewareLink.concat(httpLink));
