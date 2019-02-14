@@ -14,9 +14,17 @@ const channel = ({ id, name }, teamId) => (
 const user = ({ id, name }) => <li key={`user-${id}`}>{name}</li>;
 
 export default ({
-  teamName, username, channels, users, onAddChannelClick, teamId, onInvitePeopleClick, isOwner,
+  teamName,
+  username,
+  channels,
+  users,
+  onAddChannelClick,
+  teamId,
+  onInvitePeopleClick,
+  onDirectMessageClick,
+  isOwner,
 }) => (
-    <div className="channels">
+  <div className="channels">
       <div>
         {teamName}
         --
@@ -34,7 +42,10 @@ export default ({
       </div>
       <div>
         <ul>
-          <li>Direct Messages</li>
+          <li>
+            Direct Messages
+            <Icon onClick={onDirectMessageClick} name="plus circle" />
+          </li>
           {users.map(user)}
         </ul>
       </div>
@@ -46,4 +57,4 @@ export default ({
         </div>
       )}
     </div>
-  );
+);

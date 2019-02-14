@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
-import decode from 'jwt-decode';
 
 import Channels from '../components/Channels';
 import Teams from '../components/Teams';
 import AddChannelModal from '../components/UI/AddChannelModal';
 import InvitePeopleModal from '../components/UI/InvitePeopleModal';
+import DirectMessageModal from '../components/UI/DirectMessageModal';
 import { GET_ME_QUERY, ADD_TEAM_MEMBER_MUTATION } from '../graphql/team';
 import { CREATE_CHANNEL_MUTATION } from '../graphql/channel';
 
@@ -16,11 +16,16 @@ export default class Sidebar extends Component {
     this.state = {
       openAddChannelModal: false,
       openInvitePeopleModal: false,
+      openDirectMessageModal: false,
     };
   }
 
   handleAddChanelClick = () => {
     this.setState({ openAddChannelModal: !this.state.openAddChannelModal });
+  }
+
+  handleDirectMessageClick = () => {
+    this.setState({ openDirectMessageModal: !this.state.openDirectMessageModal });
   }
 
   handleInvitePeopleClick = () => {
@@ -30,28 +35,21 @@ export default class Sidebar extends Component {
 
   render() {
     const {
- teams, team, username, teamIdx 
-} = this.props;
-    const { openAddChannelModal, openInvitePeopleModal } = this.state;
-
-    // let username = '';
-    // const isOwner = false;
-    // try {
-    //   const token = localStorage.getItem('token');
-    //   const { user } = decode(token);
-    //   username = user.username;
-    // } catch (err) { }
+      teams, team, username, teamIdx,
+    } = this.props;
+    const { openAddChannelModal, openInvitePeopleModal, openDirectMessageModal } = this.state;
 
     return (
       <React.Fragment>
         <Teams teams={teams} />
         <Channels
           onAddChannelClick={this.handleAddChanelClick}
+          onInvitePeopleClick={this.handleInvitePeopleClick}
+          onDirectMessageClick={this.handleDirectMessageClick}
           teamName={team.name}
           username={username}
           isOwner={team.admin}
           teamId={team.id}
-          onInvitePeopleClick={this.handleInvitePeopleClick}
           channels={team.channels}
           users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'user1' }]}
         />
@@ -92,6 +90,13 @@ export default class Sidebar extends Component {
             />
           )}
         </Mutation>
+        <DirectMessageModal
+          // addTeamMember={addTeamMember}
+          teamId={team.id}
+          onClose={this.handleDirectMessageClick}
+          open={openDirectMessageModal}
+          key="direct-message-modal"
+        />
       </React.Fragment>
     );
   }
