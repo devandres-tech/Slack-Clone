@@ -18,6 +18,15 @@ export const GET_ME_QUERY = gql`
 }
 `;
 
+export const GET_TEAM_MEMBERS_QUERY = gql`
+  query($teamId: Int!) {
+  getTeamMembers(teamId: $teamId) {
+    id
+    username
+  }
+}
+`;
+
 export const ADD_TEAM_MEMBER_MUTATION = gql`
 mutation($email: String!, $teamId: Int!) {
   addTeamMember(email: $email, teamId: $teamId) {

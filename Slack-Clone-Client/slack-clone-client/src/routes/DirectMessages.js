@@ -26,7 +26,6 @@ const ViewTeam = ({ match: { params: { teamId, userId } } }) => (
       // convert our id's to integers
       const teamIdInt = parseInt(teamId, 10);
       const userIdInt = parseInt(userId, 10);
-      console.log('ids...', teamIdInt, userIdInt);
       // Gets the current team to display, if no teams then display
       // default team "general"
       const teamIdInteger = parseInt(teamId, 10);
@@ -48,7 +47,6 @@ const ViewTeam = ({ match: { params: { teamId, userId } } }) => (
           <Header channelName="some username" />
           <Query query={GET_DIRECT_MESSAGES} fetchPolicy="network-only" variables={{ teamId: teamIdInt, otherUserId: userIdInt }}>
             {({ loading, data }) => {
-              console.log(data);
               if (loading) return loading;
               return (
                 <DirectMessageContainer data={data} />
