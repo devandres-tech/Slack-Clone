@@ -31,10 +31,9 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
       const currentTeam = teamIdx === -1 ? teams[0] : teams[teamIdx];
 
       const channelIdInteger = parseInt(channelId, 10);
-      console.log();
       const channelIdx = channelIdInteger ? findIndex(currentTeam.channels, ['id', channelIdInteger]) : 0;
       const currentChannel = channelIdx === -1 ? currentTeam.channels[0] : currentTeam.channels[channelIdx];
-      console.log('current channel...', currentChannel);
+      console.log(currentTeam.directMessageMembers);
 
       return (
         <div className="app-layout">

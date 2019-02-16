@@ -14,9 +14,7 @@ const DirectMessageModal = ({
   open, onClose, teamId, history,
 }) => (
   <Query query={GET_TEAM_MEMBERS_QUERY} variables={{ teamId }}>
-      {({ loading, data }) => {
-        console.log(data);
-        return (
+      {({ loading, data }) => (
           <Modal open={open} onClose={onClose}>
             <Modal.Header>Add Channel</Modal.Header>
             <Modal.Content>
@@ -41,7 +39,7 @@ const DirectMessageModal = ({
                         highlightedIndex,
                         selectedItem,
                       }) => (
-                        <div>
+                          <div>
                             <label {...getLabelProps()} />
                             <Input {...getInputProps()} fluid placeholder="Search for users..." />
                             <ul {...getMenuProps()}>
@@ -67,7 +65,7 @@ const DirectMessageModal = ({
                                 : null}
                             </ul>
                           </div>
-                      )}
+                        )}
                     </Downshift>
                   )}
                 </Form.Field>
@@ -77,8 +75,7 @@ const DirectMessageModal = ({
               </Form>
             </Modal.Content>
           </Modal>
-        );
-      }}
+        )}
     </Query>
 );
 

@@ -51,7 +51,7 @@ export default class Sidebar extends Component {
           isOwner={team.admin}
           teamId={team.id}
           channels={team.channels}
-          users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'user1' }]}
+          users={team.directMessageMembers}
         />
         <Mutation
           mutation={CREATE_CHANNEL_MUTATION}
