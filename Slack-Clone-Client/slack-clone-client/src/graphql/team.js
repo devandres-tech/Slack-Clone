@@ -2,23 +2,31 @@ import gql from 'graphql-tag';
 
 export const GET_ME_QUERY = gql`
 {
-  me {
-    id
-    username
-    teams {
+    me {
       id
-      name
-      admin
-      directMessageMembers {
-        id
-        username
-      }
-      channels {
+      username
+      teams {
         id
         name
+        admin
+        directMessageMembers {
+          id
+          username
+        }
+        channels {
+          id
+          name
+        }
       }
     }
-  }
+}
+`;
+
+export const GET_USER_QUERY = gql`
+   query($userId: Int!) {
+    getUser(userId: $userId) {
+      username
+    }
 }
 `;
 

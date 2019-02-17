@@ -33,7 +33,6 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
       const channelIdInteger = parseInt(channelId, 10);
       const channelIdx = channelIdInteger ? findIndex(currentTeam.channels, ['id', channelIdInteger]) : 0;
       const currentChannel = channelIdx === -1 ? currentTeam.channels[0] : currentTeam.channels[channelIdx];
-      console.log(currentTeam.directMessageMembers);
 
       return (
         <div className="app-layout">
@@ -73,7 +72,6 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
                   onSubmit={async (text) => {
                     await createMessage({ variables: { text, channelId: currentChannel.id } });
                   }}
-                  createMessage={createMessage}
                   placeholder={currentChannel.name}
                 />
               )}

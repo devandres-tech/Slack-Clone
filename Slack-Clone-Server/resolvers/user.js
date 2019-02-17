@@ -15,6 +15,7 @@ export default {
   Query: {
     me: requiresAuth.createResolver((parent, args, { models, user }) => models.User.findOne({ where: { id: user.id } })),
     getAllUsers: (parent, args, { models }) => models.User.findAll(),
+    getUser: (parent, { userId }, { models }) => models.User.findOne({ where: { id: userId } }),
   },
   Mutation: {
     login: (parent, { email, password }, { models, SECRET, SECRET2 }) => tryLogin(

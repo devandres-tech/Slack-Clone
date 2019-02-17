@@ -6,7 +6,7 @@ import findIndex from 'lodash/findIndex';
 import Header from '../components/Header';
 import SendMessage from '../components/SendMessage';
 import Sidebar from '../containers/Sidebar';
-import { GET_ME_QUERY } from '../graphql/team';
+import { GET_ME_QUERY, GET_USER_QUERY } from '../graphql/team';
 import { CREATE_DIRECT_MESSAGE_MUTATION, GET_DIRECT_MESSAGES } from '../graphql/message';
 import DirectMessageContainer from '../containers/DirectMessageContainer';
 
@@ -15,7 +15,6 @@ const ViewTeam = ({ match: { params: { teamId, userId } } }) => (
   <Query query={GET_ME_QUERY} fetchPolicy="network-only">
     {({ loading, data: { me } }) => {
       if (loading) return null;
-
 
       // destructor teams from me query
       const { username, teams } = me;
@@ -33,40 +32,65 @@ const ViewTeam = ({ match: { params: { teamId, userId } } }) => (
       const currentTeam = teamIdx === -1 ? teams[0] : teams[teamIdx];
 
       return (
-        <div className="app-layout">
-          <Sidebar
-            teams={teams.map(t => ({
-              id: t.id,
-              letter: t.name.charAt(0).toUpperCase(),
-            }))}
-            team={currentTeam}
-            teamIdx={teamIdx}
-            username={username}
-            className="channels"
-          />
-          <Header channelName="some username" />
-          <Query query={GET_DIRECT_MESSAGES} fetchPolicy="network-only" variables={{ teamId: teamIdInt, otherUserId: userIdInt }}>
-            {({ loading, data }) => {
-              if (loading) return loading;
-              return (
-                <DirectMessageContainer data={data} />
-              );
-            }}
-          </Query>
-          <Mutation mutation={CREATE_DIRECT_MESSAGE_MUTATION}>
-            {createDirectMessage => (
-              <SendMessage
-                onSubmit={async (text) => {
-                  const response = await createDirectMessage({
-                    variables: { text, receiverId: userIdInt, teamId: teamIdInt },
-                  });
-                  console.log(response);
-                }}
-                placeholder={userId}
-              />
-            )}
-          </Mutation>
-        </div>
+        <Query query={GET_USER_QUERY} variables={{ userId: userIdInt }}>
+          {({ loading, data: { getUser } }) => {
+            if (loading) return 'loading';
+            console.log(getUser);
+            return (
+              <div className="app-layout">
+                <Sidebar
+                  teams={teams.map(t => ({
+                    id: t.id,
+                    letter: t.name.charAt(0).toUpperCase(),
+                  }))}
+                  team={currentTeam}
+                  teamIdx={teamIdx}
+                  username={username}
+                  className="channels"
+                />
+                <Header channelName={getUser.username} />
+                <Query query={GET_DIRECT_MESSAGES} fetchPolicy="network-only" variables={{ teamId: teamIdInt, otherUserId: userIdInt }}>
+                  {({ loading, data }) => {
+                    if (loading) return loading;
+                    return (
+                      <DirectMessageContainer data={data} />
+                    );
+                  }}
+                </Query>
+                <Mutation
+                  mutation={CREATE_DIRECT_MESSAGE_MUTATION}
+                  update={(cache) => {
+                    const response = cache.readQuery({ query: GET_ME_QUERY });
+                    const memberToUpdate = response.me.teams[teamIdx].directMessageMembers;
+                    console.log(memberToUpdate);
+                    const notAlreadyThere = memberToUpdate.every(member => member.id !== userIdInt);
+                    if (notAlreadyThere) {
+                      cache.writeQuery({
+                        query: GET_ME_QUERY,
+                        data: memberToUpdate.push({
+                          id: userIdInt,
+                          username: getUser.username,
+                          __typename: 'User',
+                        }),
+                      });
+                    }
+                  }}
+                >
+                  {createDirectMessage => (
+                    <SendMessage
+                      onSubmit={async (text) => {
+                        await createDirectMessage({
+                          variables: { text, receiverId: userIdInt, teamId: teamIdInt },
+                        });
+                      }}
+                      placeholder={getUser.username}
+                    />
+                  )}
+                </Mutation>
+              </div>
+            );
+          }}
+        </Query>
       );
     }}
   </Query>

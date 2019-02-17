@@ -45,7 +45,6 @@ export default withFormik({
   mapPropsToValues: () => ({ email: '' }),
   handleSubmit: async (values, { props: { onClose, teamId, addTeamMember }, setSubmitting, setErrors }) => {
     const response = await addTeamMember({ variables: { teamId, email: values.email } });
-    console.log(response);
     const { ok, errors } = response.data.addTeamMember;
     if (ok) {
       onClose();
