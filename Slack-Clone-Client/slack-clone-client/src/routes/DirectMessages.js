@@ -35,7 +35,6 @@ const ViewTeam = ({ match: { params: { teamId, userId } } }) => (
         <Query query={GET_USER_QUERY} variables={{ userId: userIdInt }}>
           {({ loading, data: { getUser } }) => {
             if (loading) return 'loading';
-            console.log(getUser);
             return (
               <div className="app-layout">
                 <Sidebar
@@ -50,10 +49,15 @@ const ViewTeam = ({ match: { params: { teamId, userId } } }) => (
                 />
                 <Header channelName={getUser.username} />
                 <Query query={GET_DIRECT_MESSAGES} fetchPolicy="network-only" variables={{ teamId: teamIdInt, otherUserId: userIdInt }}>
-                  {({ loading, data }) => {
+                  {({ loading, data, subscribeToMore }) => {
                     if (loading) return loading;
                     return (
-                      <DirectMessageContainer data={data} />
+                      <DirectMessageContainer
+                        teamId={teamIdInt}
+                        userId={userIdInt}
+                        subscribeToMore={subscribeToMore}
+                        data={data}
+                      />
                     );
                   }}
                 </Query>
@@ -62,7 +66,6 @@ const ViewTeam = ({ match: { params: { teamId, userId } } }) => (
                   update={(cache) => {
                     const response = cache.readQuery({ query: GET_ME_QUERY });
                     const memberToUpdate = response.me.teams[teamIdx].directMessageMembers;
-                    console.log(memberToUpdate);
                     const notAlreadyThere = memberToUpdate.every(member => member.id !== userIdInt);
                     if (notAlreadyThere) {
                       cache.writeQuery({

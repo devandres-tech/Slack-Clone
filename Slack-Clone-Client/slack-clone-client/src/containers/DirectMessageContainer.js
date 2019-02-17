@@ -1,45 +1,50 @@
 import React, { Component } from 'react';
 import { Comment } from 'semantic-ui-react';
 
-import { MESSAGE_SUBSCRIPTION } from '../graphql/message';
+import { DIRECT_MESSAGE_SUBSCRIPTION } from '../graphql/message';
 
 
 class DirectMessageContainer extends Component {
-  // componentDidMount() {
-  //   this.unsubscribe = this.subscribe(this.props.channelId);
-  // }
+  /** Subscribe as soon as components mounts */
+  componentDidMount() {
+    this.unsubscribe = this.subscribe(this.props.teamId, this.props.userId);
+  }
 
-  // componentWillReceiveProps({ channelId }) {
-  //   if (this.props.channelId !== channelId) {
-  //     if (this.unsubscribe) {
-  //       this.unsubscribe();
-  //     }
-  //     this.unsubscribe = this.subscribe(channelId);
-  //   }
-  // }
+  componentWillReceiveProps({ teamId, userId }) {
+    if (this.props.teamId !== teamId || this.props.userId !== userId) {
+      if (this.unsubscribe) {
+        this.unsubscribe();
+      }
+      this.unsubscribe = this.subscribe(teamId, userId);
+    }
+  }
 
-  // componentWillUnmount() {
-  //   if (this.unsubscribe) {
-  //     this.unsubscribe();
-  //   }
-  // }
+  /** Unsubscribe from component when unmounting */
+  componentWillUnmount() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
 
-  // subscribe = channelId => this.props.subscribeToMore({
-  //   document: MESSAGE_SUBSCRIPTION,
-  //   variables: {
-  //     channelId,
-  //   },
-  //   updateQuery: (prev, { subscriptionData }) => {
-  //     if (!subscriptionData) {
-  //       return prev;
-  //     }
+  subscribe = (teamId, userId) => this.props.subscribeToMore({
+    document: DIRECT_MESSAGE_SUBSCRIPTION,
+    variables: {
+      teamId,
+      userId,
+    },
+    updateQuery: (prev, { subscriptionData }) => {
+      if (!subscriptionData) {
+        return prev;
+      }
 
-  //     return {
-  //       ...prev,
-  //       messages: [...prev.messages, subscriptionData.data.newChannelMessage],
-  //     };
-  //   },
-  // });
+      console.log('return...');
+
+      return {
+        ...prev,
+        directMessages: [...prev.directMessages, subscriptionData.data.newDirectMessage],
+      };
+    },
+  });
 
 
   render() {
