@@ -10,8 +10,10 @@ export default {
     newDirectMessage: {
       subscribe: directMessageSubscription.createResolver(withFilter(
         () => pubsub.asyncIterator(NEW_DIRECT_MESSAGE),
-        (payload, args, { user }) => (payload.teamId === args.teamId)
-          && ((payload.senderId === user.id && payload.receiverId === args.userId) || (payload.senderId === args.userId && payload.receiverId === user.id)),
+        (payload, args, { user }) =>
+          payload.teamId === args.teamId
+          && ((payload.senderId === user.id && payload.receiverId === args.userId)
+            || (payload.senderId === args.userId && payload.receiverId === user.id)),
       )),
     },
   },
@@ -50,6 +52,9 @@ export default {
           senderId: user.id,
         });
 
+        console.log(directMessage.dataValues);
+
+        console.log('plubishing subcription...');
         pubsub.publish(NEW_DIRECT_MESSAGE, {
           teamId: args.teamId,
           senderId: user.id,

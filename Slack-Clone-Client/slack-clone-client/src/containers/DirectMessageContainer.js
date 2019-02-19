@@ -8,13 +8,16 @@ class DirectMessageContainer extends Component {
   /** Subscribe as soon as components mounts */
   componentDidMount() {
     this.unsubscribe = this.subscribe(this.props.teamId, this.props.userId);
+    console.log('sub...in directMessageContainer');
   }
 
   componentWillReceiveProps({ teamId, userId }) {
+    console.log('receiving props..', teamId, userId);
     if (this.props.teamId !== teamId || this.props.userId !== userId) {
       if (this.unsubscribe) {
         this.unsubscribe();
       }
+      console.log('sub in tillRecieveProps...');
       this.unsubscribe = this.subscribe(teamId, userId);
     }
   }
@@ -22,6 +25,7 @@ class DirectMessageContainer extends Component {
   /** Unsubscribe from component when unmounting */
   componentWillUnmount() {
     if (this.unsubscribe) {
+      console.log('unsub...');
       this.unsubscribe();
     }
   }
@@ -33,6 +37,7 @@ class DirectMessageContainer extends Component {
       userId,
     },
     updateQuery: (prev, { subscriptionData }) => {
+      console.log('PREV:', subscriptionData);
       if (!subscriptionData) {
         return prev;
       }

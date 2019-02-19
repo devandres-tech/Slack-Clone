@@ -8,7 +8,6 @@ import InvitePeopleModal from '../components/UI/InvitePeopleModal';
 import DirectMessageModal from '../components/UI/DirectMessageModal';
 import { GET_ME_QUERY, ADD_TEAM_MEMBER_MUTATION } from '../graphql/team';
 import { CREATE_CHANNEL_MUTATION } from '../graphql/channel';
-import { CREATE_DIRECT_MESSAGE_MUTATION } from '../graphql/message';
 
 
 export default class Sidebar extends Component {

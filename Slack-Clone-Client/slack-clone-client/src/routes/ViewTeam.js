@@ -1,13 +1,12 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { Query, Mutation } from 'react-apollo';
+import { Query } from 'react-apollo';
 import findIndex from 'lodash/findIndex';
 
 import Header from '../components/Header';
 import SendMessage from '../components/SendMessage';
 import Sidebar from '../containers/Sidebar';
 import { GET_ME_QUERY } from '../graphql/team';
-import { CREATE_MESSAGE_MUTATION, GET_MESSAGES } from '../graphql/message';
 import MessageContainer from '../containers/MessageContainer';
 
 
@@ -46,37 +45,18 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
             username={username}
             className="channels"
           />
-          {currentChannel && <Header channelName={currentChannel.name} />}
-          {currentChannel && (
-            <Query query={GET_MESSAGES} fetchPolicy="network-only" variables={{ channelId: currentChannel.id }}>
-              {({
-                loading, subscribeToMore, data,
-              }) => {
-                if (loading) return 'loaing...';
-                return (
-                  <MessageContainer
-                    channelId={currentChannel.id}
-                    data={data}
-                    subscribeToMore={subscribeToMore}
-                  />
-                );
-              }}
-
-            </Query>
-          )}
-          {currentChannel && (
-            <Mutation mutation={CREATE_MESSAGE_MUTATION}>
-              {createMessage => (
-                <SendMessage
-                  channelId={currentChannel.id}
-                  onSubmit={async (text) => {
-                    await createMessage({ variables: { text, channelId: currentChannel.id } });
-                  }}
-                  placeholder={currentChannel.name}
-                />
-              )}
-            </Mutation>
-          )}
+          {currentChannel ? (
+            <React.fragment>
+              <Header channelName={currentChannel.name} />
+              <MessageContainer
+                channelId={currentChannel.id}
+              />
+              <SendMessage
+                channelId={currentChannel.id}
+                channelName={currentChannel.name}
+              />
+            </React.fragment>
+          ) : null}
         </div>
       );
     }}

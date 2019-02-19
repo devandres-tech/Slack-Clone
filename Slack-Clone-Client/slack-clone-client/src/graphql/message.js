@@ -13,16 +13,16 @@ query ($channelId: Int!) {
 }
 `;
 export const GET_DIRECT_MESSAGES = gql`
-query($teamId: Int!, $otherUserId: Int!) {
-  directMessages(teamId: $teamId, otherUserId: $otherUserId) {
-    id
-    text
-    created_at
-    sender {
-      username
+  query($teamId: Int!, $userId: Int!) {
+    directMessages(teamId: $teamId, otherUserId: $userId) {
+      id
+      sender {
+        username
+      }
+      text
+      created_at
     }
   }
-}
 `;
 
 export const CREATE_MESSAGE_MUTATION = gql`
