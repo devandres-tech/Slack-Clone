@@ -7,18 +7,19 @@ import { MESSAGE_SUBSCRIPTION, GET_MESSAGES } from '../graphql/message';
 let unsubscribe = null;
 
 class MessageContainer extends Component {
-  componentDidMount() {
-    this.unsubscribe = this.subscribe(this.props.channelId);
-  }
-
-  componentWillReceiveProps({ channelId }) {
-    if (this.props.channelId !== channelId) {
+  componentWillReceiveProps(nextProps, nextContent) {
+    if (this.props.channelId !== nextProps.channelId) {
       if (unsubscribe) {
         unsubscribe();
         unsubscribe = null;
       }
     }
   }
+
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    return this.props.channelId !== nextProps.channelId;
+  }
+
 
   componentWillUnmount() {
     if (unsubscribe) {

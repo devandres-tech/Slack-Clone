@@ -32,6 +32,7 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
       const channelIdInteger = parseInt(channelId, 10);
       const channelIdx = channelIdInteger ? findIndex(currentTeam.channels, ['id', channelIdInteger]) : 0;
       const currentChannel = channelIdx === -1 ? currentTeam.channels[0] : currentTeam.channels[channelIdx];
+      console.log(currentChannel);
 
       return (
         <div className="app-layout">
@@ -46,7 +47,7 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
             className="channels"
           />
           {currentChannel ? (
-            <React.fragment>
+            <>
               <Header channelName={currentChannel.name} />
               <MessageContainer
                 channelId={currentChannel.id}
@@ -55,7 +56,7 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
                 channelId={currentChannel.id}
                 channelName={currentChannel.name}
               />
-            </React.fragment>
+            </>
           ) : null}
         </div>
       );
