@@ -3,9 +3,9 @@ import { Redirect } from 'react-router-dom';
 import { Query, Mutation } from 'react-apollo';
 import findIndex from 'lodash/findIndex';
 
-import Header from '../components/Header';
-import SendMessage from '../components/SendMessage';
+import DirectMessageHeader from '../components/DirectMessageHeader';
 import Sidebar from '../containers/Sidebar';
+import SendDirectMessage from '../components/SendDirectMessage';
 import { GET_ME_QUERY, GET_USER_QUERY } from '../graphql/team';
 import { CREATE_DIRECT_MESSAGE_MUTATION, GET_DIRECT_MESSAGES } from '../graphql/message';
 import DirectMessageContainer from '../containers/DirectMessageContainer';
@@ -43,15 +43,15 @@ const ViewTeam = ({ match: { params: { teamId, userId } } }) => (
             username={username}
             className="channels"
           />
-          <Header userId={userIdInt} />
+          <DirectMessageHeader userId={userIdInt} />
 
           <DirectMessageContainer
             teamId={teamIdInt}
             userId={userIdInt}
           />
-          <SendMessage
+          <SendDirectMessage
             receiverId={userIdInt}
-            userName={userIdInt}
+            username={userIdInt}
             teamId={teamIdInt}
           />
         </div>

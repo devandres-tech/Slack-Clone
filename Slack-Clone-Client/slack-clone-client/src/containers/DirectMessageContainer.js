@@ -1,86 +1,87 @@
 import React, { Component } from 'react';
 import { Comment } from 'semantic-ui-react';
 
-import { DIRECT_MESSAGE_SUBSCRIPTION } from '../graphql/message';
+import { Query } from 'react-apollo';
+import { DIRECT_MESSAGE_SUBSCRIPTION, DIRECT_MESSAGES_QUERY } from '../graphql/message';
 
+let unsubscribe = null;
 
-class DirectMessageContainer extends Component {
-  /** Subscribe as soon as components mounts */
-  componentDidMount() {
-    this.unsubscribe = this.subscribe(this.props.teamId, this.props.userId);
-    console.log('sub...in directMessageContainer');
-  }
-
-  componentWillReceiveProps({ teamId, userId }) {
-    console.log('receiving props..', teamId, userId);
-    if (this.props.teamId !== teamId || this.props.userId !== userId) {
-      if (this.unsubscribe) {
-        this.unsubscribe();
+export default class DirectMessageContainer extends Component {
+  componentWillReceiveProps(nextProps, nextContext) {
+    if (this.props.teamId !== nextProps.teamId || this.props.userId !== nextProps.userId) {
+      if (unsubscribe) {
+        unsubscribe = null;
       }
-      console.log('sub in tillRecieveProps...');
-      this.unsubscribe = this.subscribe(teamId, userId);
     }
+    console.log('teamid: ', this.props.teamId, 'userId:', this.props.userId);
   }
 
-  /** Unsubscribe from component when unmounting */
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    return (this.props.teamId !== nextProps.teamId || this.props.userId);
+  }
+
   componentWillUnmount() {
-    if (this.unsubscribe) {
-      console.log('unsub...');
-      this.unsubscribe();
+    if (unsubscribe) {
+      unsubscribe();
+      unsubscribe = null;
     }
   }
-
-  subscribe = (teamId, userId) => this.props.subscribeToMore({
-    document: DIRECT_MESSAGE_SUBSCRIPTION,
-    variables: {
-      teamId,
-      userId,
-    },
-    updateQuery: (prev, { subscriptionData }) => {
-      console.log('PREV:', subscriptionData);
-      if (!subscriptionData) {
-        return prev;
-      }
-
-      console.log('return...');
-
-      return {
-        ...prev,
-        directMessages: [...prev.directMessages, subscriptionData.data.newDirectMessage],
-      };
-    },
-  });
-
 
   render() {
-    const { data } = this.props;
-
+    const { teamId, userId } = this.props;
 
     return (
-      <div className="messages">
-        <Comment.Group>
-          {data.directMessages.map(message => (
+      <Query
+        query={DIRECT_MESSAGES_QUERY}
+        fetchPolicy="network-only"
+        variables={{ teamId, userId }}
+      >
+        {({
+          loading, error, data: { directMessages }, subscribeToMore,
+        }) => {
+          if (loading) return <p>loading...</p>;
+          if (error) return <p>An Error Occurred</p>;
+          if (!unsubscribe) {
+            unsubscribe = subscribeToMore({
+              document: DIRECT_MESSAGE_SUBSCRIPTION,
+              variables: { teamId: this.props.teamId, userId: this.props.userId },
+              updateQuery: (prev, { subscriptionData }) => {
+                console.log('PREV:', prev);
+                if (!subscriptionData) {
+                  return prev;
+                }
+                return {
+                  ...prev,
+                  messages: [...prev.messages, subscriptionData.data.newChannelMessage],
+                };
+              },
+            });
+          }
+          return (
+            <div className="messages">
+              <Comment.Group>
+                {directMessages.map(message => (
 
-            <Comment key={`${message.id}-direct-message`}>
-              <Comment.Content>
-                <Comment.Author as="a">{message.sender.username}</Comment.Author>
-                <Comment.Metadata>
-                  <div>
-                    {new Date(parseInt(message.created_at, 10)).toString().slice(0, 24)}
-                  </div>
-                </Comment.Metadata>
-                <Comment.Text>{message.text}</Comment.Text>
-                <Comment.Actions>
-                  <Comment.Action>Reply</Comment.Action>
-                </Comment.Actions>
-              </Comment.Content>
-            </Comment>
-          ))}
-        </Comment.Group>
-      </div>
+                  <Comment key={`${message.id}-direct-message`}>
+                    <Comment.Content>
+                      <Comment.Author as="a">{message.sender.username}</Comment.Author>
+                      <Comment.Metadata>
+                        <div>
+                          {new Date(parseInt(message.created_at, 10)).toString().slice(0, 24)}
+                        </div>
+                      </Comment.Metadata>
+                      <Comment.Text>{message.text}</Comment.Text>
+                      <Comment.Actions>
+                        <Comment.Action>Reply</Comment.Action>
+                      </Comment.Actions>
+                    </Comment.Content>
+                  </Comment>
+                ))}
+              </Comment.Group>
+            </div>
+          );
+        }}
+      </Query>
     );
   }
 }
-
-
-export default DirectMessageContainer;

@@ -48,7 +48,7 @@ class MessageContainer extends Component {
                 channelId: this.props.channelId,
               },
               updateQuery: (prev, { subscriptionData }) => {
-                console.log('PREV:', prev);
+                console.log('prev', prev);
                 if (!subscriptionData) {
                   return prev;
                 }
