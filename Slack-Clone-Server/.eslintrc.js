@@ -4,4 +4,7 @@ module.exports = {
     "rules": {
         "implicit-arrow-linebreak": 0,
     },
+    "env": {
+        "jest": true
+    }
 };

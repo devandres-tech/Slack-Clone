@@ -4,23 +4,35 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node index.js"
+    "start": "nodemon --exec babel-node index.js",
+    "test": "jest"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
   },
   "author": "Andres Alcocer",
   "license": "MIT",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-3": "^6.24.1",
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.4",
+    "axios": "^0.18.0",
+    "babel-jest": "^24.1.0",
+    "babel-polyfill": "^6.26.0",
     "eslint": "^5.12.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.12.4",
+    "jest": "^24.1.0",
     "nodemon": "^1.18.9"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.2.5",
     "apollo-server-express": "^2.3.3",
     "bcrypt": "^3.0.3",
     "body-parser": "^1.18.3",
@@ -35,6 +47,7 @@
     "merge-graphql-schemas": "^1.5.8",
     "pg": "^7.8.0",
     "pg-hstore": "^2.3.2",
+    "regenerator-runtime": "^0.13.1",
     "sequelize": "^4.42.0",
     "subscriptions-transport-ws": "^0.9.15"
   }
