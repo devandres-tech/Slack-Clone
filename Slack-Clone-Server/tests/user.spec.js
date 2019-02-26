@@ -3,16 +3,20 @@ import regeneratorRuntime from 'regenerator-runtime';
 
 describe('user resolvers', () => {
   test('getAllUsers', async () => {
-    const response = await axios.post('http://localhost:4040/graphql', {
-      query: `
-        query {
-          allUsers {
-            id
-            username
-            email
+    const response = await axios({
+      method: 'POST',
+      url: 'http://localhost:4040/graphql',
+      data: {
+        query: `
+          {
+            getAllUsers {
+              id
+              username
+              email
+            }
           }
-        }  
-      `,
+        `,
+      },
     });
 
     const { data } = response;
