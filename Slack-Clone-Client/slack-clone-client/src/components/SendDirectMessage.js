@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import { Input } from 'semantic-ui-react';
-import { withFormik } from 'formik';
 import { CREATE_DIRECT_MESSAGE_MUTATION } from '../graphql/message';
 
 export default class sendMessage extends Component {

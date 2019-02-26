@@ -17,7 +17,7 @@ export default class DirectMessageContainer extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {
-    return (this.props.teamId !== nextProps.teamId || this.props.userId);
+    return (this.props.teamId !== nextProps.teamId || this.props.userId !== nextProps.userId);
   }
 
   componentWillUnmount() {
@@ -34,7 +34,7 @@ export default class DirectMessageContainer extends Component {
       <Query
         query={DIRECT_MESSAGES_QUERY}
         fetchPolicy="network-only"
-        variables={{ teamId, userId }}
+        variables={{ teamId, otherUserId: userId }}
       >
         {({
           loading, error, data: { directMessages }, subscribeToMore,
@@ -46,13 +46,12 @@ export default class DirectMessageContainer extends Component {
               document: DIRECT_MESSAGE_SUBSCRIPTION,
               variables: { teamId: this.props.teamId, userId: this.props.userId },
               updateQuery: (prev, { subscriptionData }) => {
-                console.log('PREV:', prev);
                 if (!subscriptionData) {
                   return prev;
                 }
                 return {
                   ...prev,
-                  messages: [...prev.messages, subscriptionData.data.newChannelMessage],
+                  directMessages: [...prev.directMessages, subscriptionData.data.newDirectMessage],
                 };
               },
             });

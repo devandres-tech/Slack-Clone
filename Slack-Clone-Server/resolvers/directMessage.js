@@ -8,13 +8,13 @@ const NEW_DIRECT_MESSAGE = 'NEW_DIRECT_MESSAGE';
 export default {
   Subscription: {
     newDirectMessage: {
-      subscribe: withFilter(
+      subscribe: directMessageSubscription.createResolver(withFilter(
         () => pubsub.asyncIterator(NEW_DIRECT_MESSAGE),
         (payload, args, { user }) =>
           payload.teamId === args.teamId
-          && ((payload.senderId === user.id && payload.receiverId === args.userId)
+          || ((payload.senderId === user.id && payload.receiverId === args.userId)
             || (payload.senderId === args.userId && payload.receiverId === user.id)),
-      ),
+      )),
     },
   },
   DirectMessage: {
@@ -27,7 +27,7 @@ export default {
   },
 
   Query: {
-    directMessages: async (parent, { teamId, otherUserId }, { models, user }) =>
+    directMessages: requiresAuth.createResolver(async (parent, { teamId, otherUserId }, { models, user }) =>
       models.DirectMessage.findAll(
         {
           order: [['created_at', 'ASC']],
@@ -41,18 +41,17 @@ export default {
           },
         },
         { raw: true },
-      ),
+      )),
   },
 
   Mutation: {
-    createDirectMessage: async (parent, args, { models, user }) => {
+    createDirectMessage: requiresAuth.createResolver(async (parent, args, { models, user }) => {
       try {
         const directMessage = await models.DirectMessage.create({
           ...args,
           senderId: user.id,
         });
 
-        console.log('plubishing subcription...', directMessage);
         pubsub.publish(NEW_DIRECT_MESSAGE, {
           teamId: args.teamId,
           senderId: user.id,
@@ -70,6 +69,6 @@ export default {
         console.log(err);
         return false;
       }
-    },
+    }),
   },
 };

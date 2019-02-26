@@ -13,8 +13,8 @@ query ($channelId: Int!) {
 }
 `;
 export const DIRECT_MESSAGES_QUERY = gql`
-  query($teamId: Int!, $userId: Int!) {
-    directMessages(teamId: $teamId, otherUserId: $userId) {
+  query DIRECT_MESSAGES_QUERY($teamId: Int!, $otherUserId: Int!) {
+    directMessages(teamId: $teamId, otherUserId: $otherUserId) {
       id
       sender {
         username

@@ -1,13 +1,12 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { Query, Mutation } from 'react-apollo';
+import { Query } from 'react-apollo';
 import findIndex from 'lodash/findIndex';
 
 import DirectMessageHeader from '../components/DirectMessageHeader';
 import Sidebar from '../containers/Sidebar';
 import SendDirectMessage from '../components/SendDirectMessage';
-import { GET_ME_QUERY, GET_USER_QUERY } from '../graphql/team';
-import { CREATE_DIRECT_MESSAGE_MUTATION, GET_DIRECT_MESSAGES } from '../graphql/message';
+import { GET_ME_QUERY } from '../graphql/team';
 import DirectMessageContainer from '../containers/DirectMessageContainer';
 
 
