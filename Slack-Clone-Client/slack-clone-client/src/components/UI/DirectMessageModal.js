@@ -16,7 +16,7 @@ const DirectMessageModal = ({
   <Query query={GET_TEAM_MEMBERS_QUERY} variables={{ teamId }}>
       {({ loading, data }) => (
         <Modal open={open} onClose={onClose}>
-          <Modal.Header>Add Channel</Modal.Header>
+          <Modal.Header>Direct Message Users on your Team</Modal.Header>
           <Modal.Content>
             <Form>
               <Form.Field>

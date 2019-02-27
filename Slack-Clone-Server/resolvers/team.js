@@ -14,11 +14,11 @@ export default {
     createTeam: requiresAuth.createResolver(async (parent, args, { models, user }) => {
       try {
         const response = await models.sequelize.transaction(
-          async () => {
-            const team = await models.Team.create({ ...args, owner: user.id });
+          async (transaction) => {
+            const team = await models.Team.create({ ...args, owner: user.id }, { transaction });
             // Create default channel for every team created
-            await models.Channel.create({ name: 'general', public: true, teamId: team.id });
-            await models.Member.create({ teamId: team.id, userId: user.id, admin: true });
+            await models.Channel.create({ name: 'general', public: true, teamId: team.id }, { transaction });
+            await models.Member.create({ teamId: team.id, userId: user.id, admin: true }, { transaction });
             return team;
           },
         );

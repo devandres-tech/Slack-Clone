@@ -5,6 +5,9 @@ const team = ({ id, letter }) => <Link key={`team-${id}`} to={`/view-team/${id}`
 
 export default ({ teams }) => (
   <div className="teams">
-    <ul>{teams.map(team)}</ul>
+    <ul>
+      {teams.map(team)}
+      <Link key="add-team" to="/create-team"><li>+</li></Link>
+    </ul>
   </div>
 );

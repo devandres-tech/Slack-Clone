@@ -29,7 +29,9 @@ export default observer(class Login extends Component {
     if (ok) {
       localStorage.setItem('token', token);
       localStorage.setItem('refreshToken', refreshToken);
-      this.props.history.push('/');
+      console.log('token from login', token);
+      console.log('refresh token from login', refreshToken);
+      this.props.history.push('/view-team');
     } else {
       const err = {};
       errors.forEach(({ path, message }) => {

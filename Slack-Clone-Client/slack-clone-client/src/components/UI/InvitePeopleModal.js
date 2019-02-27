@@ -51,7 +51,16 @@ export default withFormik({
       setSubmitting(false);
     } else {
       setSubmitting(false);
-      setErrors(normalizeErrors(errors));
+      const errorsLength = errors.length;
+      const filteredErrors = errors.filter(e => e.message !== 'user_id must be unique');
+      console.log(filteredErrors);
+      if (errorsLength !== filteredErrors.length) {
+        filteredErrors.push({
+          path: 'email',
+          message: 'this user is already part of the team',
+        });
+      }
+      setErrors(normalizeErrors(filteredErrors));
     }
   },
   displayName: 'BasicForm',
