@@ -17,7 +17,7 @@ const InvitePeopleModal = ({
   touched,
   errors,
 }) => (
-  <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={onClose}>
       <Modal.Header>Add users to your team</Modal.Header>
       <Modal.Content>
         <Form>
@@ -39,7 +39,7 @@ const InvitePeopleModal = ({
         </Form>
       </Modal.Content>
     </Modal>
-);
+  );
 
 export default withFormik({
   mapPropsToValues: () => ({ email: '' }),
