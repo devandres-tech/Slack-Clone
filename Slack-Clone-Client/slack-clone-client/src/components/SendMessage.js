@@ -42,9 +42,7 @@ export default class sendMessage extends Component {
             <form onSubmit={e => this.handleSubmit(e, createMessage)}>
               <div className="sendMessage">
                 <FileUpload>
-                  <Button icon>
-                    <Icon name="plus" />
-                  </Button>
+                  <Icon name="plus" />
                 </FileUpload>
                 <Input
                   placeholder={`Message# ${channelName}`}

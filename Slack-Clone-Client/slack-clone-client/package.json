@@ -11,6 +11,7 @@
     "apollo-link-context": "^1.0.14",
     "apollo-link-http": "^1.5.11",
     "apollo-link-ws": "^1.0.14",
+    "apollo-upload-client": "^10.0.0",
     "apollo-utilities": "^1.1.2",
     "downshift": "^3.2.2",
     "formik": "^1.5.0",

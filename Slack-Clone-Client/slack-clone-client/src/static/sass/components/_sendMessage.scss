@@ -10,4 +10,14 @@
     margin: 0;
     padding: 1.4rem;
   }
+
+  & .dropzone-btn {
+    padding-left: 1rem;
+    padding-top: 1rem;
+    border: .2rem solid gray;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }

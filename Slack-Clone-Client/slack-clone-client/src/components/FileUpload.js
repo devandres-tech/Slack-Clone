@@ -9,7 +9,7 @@ export default class FileUpload extends Component {
     console.log(acceptedFiles);
   }
 
-  render(props) {
+  render() {
     return (
       <Dropzone onDrop={this.onDrop}>
         {({ getRootProps, getInputProps, isDragActive }) => (
@@ -17,13 +17,8 @@ export default class FileUpload extends Component {
             <input {...getInputProps()} />
             {
               isDragActive
-                ? 'dorp'
-                : (
-                  <Button icon>
-                    <Icon name="plus" />
-                  </Button>
-                )
-
+                ? 'dorping items'
+                : this.props.children
             }
           </div>
         )}
