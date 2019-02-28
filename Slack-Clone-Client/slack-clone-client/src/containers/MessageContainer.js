@@ -3,7 +3,10 @@ import { Comment } from 'semantic-ui-react';
 
 import { Query } from 'react-apollo';
 import { MESSAGE_SUBSCRIPTION, GET_MESSAGES } from '../graphql/message';
+import FileUpload from '../components/FileUpload';
 
+
+// used to hold the value of subscription
 let unsubscribe = null;
 
 class MessageContainer extends Component {
@@ -64,7 +67,6 @@ class MessageContainer extends Component {
             <div className="messages">
               <Comment.Group>
                 {messages.map(message => (
-
                   <Comment key={`${message.id}-message`}>
                     <Comment.Content>
                       <Comment.Author as="a">{message.user.username}</Comment.Author>
@@ -72,6 +74,7 @@ class MessageContainer extends Component {
                         <div>
                           {new Date(parseInt(message.created_at, 10)).toString().slice(0, 24)}
                         </div>
+
                       </Comment.Metadata>
                       <Comment.Text>{message.text}</Comment.Text>
                       <Comment.Actions>

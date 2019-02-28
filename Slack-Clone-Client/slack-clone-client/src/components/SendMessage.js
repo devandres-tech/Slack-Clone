@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
-import { Input } from 'semantic-ui-react';
+import { Input, Button, Icon } from 'semantic-ui-react';
 import { CREATE_MESSAGE_MUTATION } from '../graphql/message';
+import FileUpload from './FileUpload';
 
 export default class sendMessage extends Component {
   constructor(props) {
@@ -40,8 +41,12 @@ export default class sendMessage extends Component {
           return (
             <form onSubmit={e => this.handleSubmit(e, createMessage)}>
               <div className="sendMessage">
+                <FileUpload>
+                  <Button icon>
+                    <Icon name="plus" />
+                  </Button>
+                </FileUpload>
                 <Input
-                  fluid
                   placeholder={`Message# ${channelName}`}
                   onChange={this.messageOnChangeHandler}
                   value={message}
