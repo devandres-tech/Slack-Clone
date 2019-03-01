@@ -9,17 +9,34 @@ export default class FileUpload extends Component {
     console.log(acceptedFiles);
   }
 
+  // render() {
+  //   return (
+  //     <Dropzone onDrop={this.onDrop}>
+  //       {({ getRootProps, getInputProps, isDragActive }) => (
+  //         <div {...getRootProps()} className="dropzone-btn">
+  //           <input {...getInputProps()} />
+  //           {
+  //             isDragActive
+  //               ? 'dorping items'
+  //               : this.props.children
+  //           }
+  //         </div>
+  //       )}
+  //     </Dropzone>
+  //   );
+  // }
+
   render() {
     return (
       <Dropzone onDrop={this.onDrop}>
         {({ getRootProps, getInputProps, isDragActive }) => (
           <div {...getRootProps()} className="dropzone-btn">
             <input {...getInputProps()} />
-            {
-              isDragActive
-                ? 'dorping items'
-                : this.props.children
-            }
+            {isDragActive ? (
+              <p>Drop files here...</p>
+            ) : (
+              this.props.children
+            )}
           </div>
         )}
       </Dropzone>

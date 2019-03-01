@@ -26,8 +26,8 @@ export const DIRECT_MESSAGES_QUERY = gql`
 `;
 
 export const CREATE_MESSAGE_MUTATION = gql`
-  mutation($channelId: Int!, $text: String!) {
-    createMessage(channelId: $channelId, text: $text)
+  mutation($channelId: Int!, $text: String!, $file: File) {
+    createMessage(channelId: $channelId, text: $text, file: $file)
   }
 `;
 

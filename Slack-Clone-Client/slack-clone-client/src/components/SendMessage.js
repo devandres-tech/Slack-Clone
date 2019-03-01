@@ -4,6 +4,7 @@ import { Input, Button, Icon } from 'semantic-ui-react';
 import { CREATE_MESSAGE_MUTATION } from '../graphql/message';
 import FileUpload from './FileUpload';
 
+
 export default class sendMessage extends Component {
   constructor(props) {
     super(props);
@@ -26,6 +27,19 @@ export default class sendMessage extends Component {
     }
   };
 
+  handleChange = async ({ target: { validity, files: [file] } }, createMessage) => {
+    console.log('this is the file to upload', file);
+    if (validity.valid) {
+      const response = await createMessage({
+        variables: { channelId: this.props.channelId, file },
+      });
+      console.log(response);
+      if (!response) {
+        alert('Error Occurred while submitting message');
+      }
+    }
+  }
+
 
   render() {
     const { channelId, channelName } = this.props;
@@ -43,6 +57,10 @@ export default class sendMessage extends Component {
               <div className="sendMessage">
                 <FileUpload>
                   <Icon name="plus" />
+                  <input
+                    type="file"
+                    onChange={e => this.handleChange(e, createMessage)}
+                  />
                 </FileUpload>
                 <Input
                   placeholder={`Message# ${channelName}`}

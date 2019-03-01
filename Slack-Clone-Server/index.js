@@ -3,6 +3,8 @@ import { ApolloServer } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import dotenv from 'dotenv';
 import path from 'path';
+import { GraphQlServer } from 'graphql-yoga';
+
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
@@ -53,7 +55,7 @@ const addUser = async (req, res, next) => {
 };
 app.use(addUser);
 
-const server = new ApolloServer({
+const server = new GraphQlServer({
   schema,
   subscriptions: {
     onConnect: async ({ token, refreshToken }, webSocket) => {
@@ -78,6 +80,10 @@ const server = new ApolloServer({
     SECRET,
     SECRET2,
   }),
+  uploads: {
+    maxFileSize: 10000000, // 10 MB
+    maxFiles: 20,
+  },
 });
 
 server.applyMiddleware({ app });

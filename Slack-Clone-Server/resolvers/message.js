@@ -1,9 +1,42 @@
 import { withFilter } from 'graphql-subscriptions';
+import fs from 'fs';
+import shortid from 'shortid';
+import mkdirp from 'mkdirp';
 
 import requiresAuth, { requiresTeamAccess } from '../permissions';
 import pubsub from '../pubsub';
 
+const UPLOAD_DIR = '../file-uploads';
+// Ensure upload directory exists.
+mkdirp.sync(UPLOAD_DIR);
+
 const NEW_CHANNEL_MESSAGE = 'NEW_CHANNEL_MESSAGE';
+
+const storeFS = ({ stream, filename, mimetype }) => {
+  const id = shortid.generate();
+  const url = `${UPLOAD_DIR}/${id}.${mimetype.slice(mimetype.indexOf('/') + 1)}`;
+  return new Promise((resolve, reject) =>
+    stream
+      .on('error', (error) => {
+        if (stream.truncated) {
+          // Delete the truncated file.
+          fs.unlinkSync(url);
+        }
+
+        reject(error);
+      })
+      .pipe(fs.createWriteStream(url))
+      .on('error', error => reject(error))
+      .on('finish', () => resolve({ id, url })));
+};
+
+const processUpload = async (upload) => {
+  const { createReadStream, filename, mimetype } = await upload;
+  const stream = createReadStream();
+  const { id, url } = await storeFS({ stream, filename, mimetype });
+  return { url, filetype: mimetype };
+};
+
 
 export default {
   Subscription: {
@@ -33,10 +66,16 @@ export default {
   },
 
   Mutation: {
-    createMessage: requiresAuth.createResolver(async (parent, args, { models, user }) => {
+    createMessage: requiresAuth.createResolver(async (parent, { file, ...args }, { models, user }) => {
       try {
+        const messageData = args;
+        if (file) {
+          const { url, filetype } = await processUpload(file);
+          messageData.url = url;
+          messageData.filetype = filetype;
+        }
         const message = await models.Message.create({
-          ...args,
+          ...messageData,
           userId: user.id,
         });
 
