@@ -13,7 +13,6 @@ export default class DirectMessageContainer extends Component {
         unsubscribe = null;
       }
     }
-    console.log('teamid: ', this.props.teamId, 'userId:', this.props.userId);
   }
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {

@@ -3,7 +3,6 @@ import { ApolloServer } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 import dotenv from 'dotenv';
 import path from 'path';
-import { GraphQlServer } from 'graphql-yoga';
 
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import cors from 'cors';
@@ -55,7 +54,7 @@ const addUser = async (req, res, next) => {
 };
 app.use(addUser);
 
-const server = new GraphQlServer({
+const server = new ApolloServer({
   schema,
   subscriptions: {
     onConnect: async ({ token, refreshToken }, webSocket) => {

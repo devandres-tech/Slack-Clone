@@ -44,7 +44,6 @@
     "graphql": "^14.1.1",
     "graphql-subscriptions": "^1.0.0",
     "graphql-tools": "^4.0.4",
-    "graphql-yoga": "^1.17.4",
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",
     "merge-graphql-schemas": "^1.5.8",
