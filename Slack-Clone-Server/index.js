@@ -22,11 +22,6 @@ const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './resolvers'))
 
 dotenv.config();
 
-const schema = makeExecutableSchema({
-  typeDefs,
-  resolvers,
-});
-
 const app = express();
 app.use(cors('*'));
 
@@ -55,7 +50,8 @@ const addUser = async (req, res, next) => {
 app.use(addUser);
 
 const server = new ApolloServer({
-  schema,
+  typeDefs,
+  resolvers,
   subscriptions: {
     onConnect: async ({ token, refreshToken }, webSocket) => {
       if (token && refreshToken) {

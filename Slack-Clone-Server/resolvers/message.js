@@ -22,7 +22,6 @@ const storeFS = ({ stream, filename, mimetype }) => {
           // Delete the truncated file.
           fs.unlinkSync(url);
         }
-
         reject(error);
       })
       .pipe(fs.createWriteStream(url))
@@ -73,6 +72,9 @@ export default {
           const { url, filetype } = await processUpload(file);
           messageData.url = url;
           messageData.filetype = filetype;
+        }
+        if (!messageData.filetype) {
+          messageData.filetype = 'text/plain';
         }
         const message = await models.Message.create({
           ...messageData,

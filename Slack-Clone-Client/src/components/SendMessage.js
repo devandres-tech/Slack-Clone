@@ -27,6 +27,7 @@ export default class sendMessage extends Component {
     }
   };
 
+  /** Handle uploading a file */
   handleChange = async ({ target: { validity, files: [file] } }, createMessage) => {
     console.log('this is the file to upload', file);
     if (validity.valid) {
@@ -55,13 +56,13 @@ export default class sendMessage extends Component {
           return (
             <form onSubmit={e => this.handleSubmit(e, createMessage)}>
               <div className="sendMessage">
-                <FileUpload>
+                <div>
                   <Icon name="plus" />
                   <input
                     type="file"
                     onChange={e => this.handleChange(e, createMessage)}
                   />
-                </FileUpload>
+                </div>
                 <Input
                   placeholder={`Message# ${channelName}`}
                   onChange={this.messageOnChangeHandler}

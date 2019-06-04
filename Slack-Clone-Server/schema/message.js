@@ -24,6 +24,6 @@ export default `
   }
 
   type Mutation {
-    createMessage(channelId: Int!, text: String!, file: File): Boolean!
+    createMessage(channelId: Int!, text: String!, file: Upload!): Boolean!
   }
 `;

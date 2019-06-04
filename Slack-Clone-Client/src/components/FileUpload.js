@@ -3,43 +3,24 @@ import Dropzone from 'react-dropzone';
 import { Button, Icon } from 'semantic-ui-react';
 
 
-export default class FileUpload extends Component {
-  onDrop = (acceptedFiles, rejectedFiles) => {
-    // Do something with files
-    console.log(acceptedFiles);
-  }
+const FileUpload = ({ children }) => (
+  <Dropzone onDrop={files => console.log(files)} className="ignore">
+    {({ getRootProps, getInputProps }) => (
+      <div className="container">
+        <div
+          {...getRootProps({
+            className: 'ignore',
+            onDrop: event => event.stopPropagation(),
+          })}
+        >
+          <input {...getInputProps()} />
+          <Button icon>
+            <Icon name="plus" />
+          </Button>
+        </div>
+      </div>
+    )}
+  </Dropzone>
+);
 
-  // render() {
-  //   return (
-  //     <Dropzone onDrop={this.onDrop}>
-  //       {({ getRootProps, getInputProps, isDragActive }) => (
-  //         <div {...getRootProps()} className="dropzone-btn">
-  //           <input {...getInputProps()} />
-  //           {
-  //             isDragActive
-  //               ? 'dorping items'
-  //               : this.props.children
-  //           }
-  //         </div>
-  //       )}
-  //     </Dropzone>
-  //   );
-  // }
-
-  render() {
-    return (
-      <Dropzone onDrop={this.onDrop}>
-        {({ getRootProps, getInputProps, isDragActive }) => (
-          <div {...getRootProps()} className="dropzone-btn">
-            <input {...getInputProps()} />
-            {isDragActive ? (
-              <p>Drop files here...</p>
-            ) : (
-              this.props.children
-            )}
-          </div>
-        )}
-      </Dropzone>
-    );
-  }
-}
+export default FileUpload;
