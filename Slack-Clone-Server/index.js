@@ -81,9 +81,12 @@ const server = new ApolloServer({
   },
 });
 
+app.use('/file-uploads', express.static('./file-uploads'));
 server.applyMiddleware({ app });
 const httpServer = http.createServer(app);
+// install websocket subscriptions
 server.installSubscriptionHandlers(httpServer);
+// serves static files
 
 // sync() will create all tables if they doesn't exist in database
 // before running the sever

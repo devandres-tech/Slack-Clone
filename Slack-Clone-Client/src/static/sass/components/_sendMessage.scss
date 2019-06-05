@@ -23,7 +23,7 @@
 }
 
 .file-upload-container {
-  cursor: pointer;
+
   display: inline-block;
   position: relative;
   height: 4rem;
@@ -32,18 +32,22 @@
   & .upload-button {
     position: absolute;
     height: 4rem;
+    width: 4rem;
     margin-left: 2rem;
+
   }
 
   input[type='file'] {
     position: absolute;
     left: 0;
     opacity: 0;
-    top: 0;
+    top: -2rem;
     bottom: 0;
     width: 4rem;
-    height: 4rem;
-    background-color: red;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
 

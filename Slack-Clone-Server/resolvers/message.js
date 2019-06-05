@@ -6,7 +6,7 @@ import mkdirp from 'mkdirp';
 import requiresAuth, { requiresTeamAccess } from '../permissions';
 import pubsub from '../pubsub';
 
-const UPLOAD_DIR = '../file-uploads';
+const UPLOAD_DIR = './file-uploads';
 // Ensure upload directory exists.
 mkdirp.sync(UPLOAD_DIR);
 
@@ -72,13 +72,10 @@ export default {
           const { url, filetype } = await processUpload(file);
           messageData.url = url;
           messageData.filetype = filetype;
-          console.log('url', url);
-          console.log('file', filetype);
         }
         if (!messageData.filetype) {
           messageData.filetype = 'text/plain';
         }
-        console.log('message data', message.dataValues);
         const message = await models.Message.create({
           ...messageData,
           userId: user.id,

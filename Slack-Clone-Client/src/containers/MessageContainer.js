@@ -74,7 +74,9 @@ class MessageContainer extends Component {
                         </div>
 
                       </Comment.Metadata>
-                      <Comment.Text>{message.text}</Comment.Text>
+                      {message.url
+                        ? <img src={`http://localhost:4040/${message.url}`} alt="file" className="file-message" />
+                        : <Comment.Text>{message.text}</Comment.Text>}
                       <Comment.Actions>
                         <Comment.Action>Reply</Comment.Action>
                       </Comment.Actions>

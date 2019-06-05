@@ -9,6 +9,8 @@ query ($channelId: Int!) {
     user {
       username
     }
+    url
+    filetype
   }
 }
 `;
@@ -45,6 +47,8 @@ export const MESSAGE_SUBSCRIPTION = gql`
       user {
         username
       }
+      url
+      filetype
       created_at
     }
   }
