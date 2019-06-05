@@ -3,7 +3,6 @@ import { Comment } from 'semantic-ui-react';
 
 import { Query } from 'react-apollo';
 import { MESSAGE_SUBSCRIPTION, GET_MESSAGES } from '../graphql/message';
-import FileUpload from '../components/FileUpload';
 
 
 // used to hold the value of subscription

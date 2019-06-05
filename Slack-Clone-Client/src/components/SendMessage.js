@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import { Input, Button, Icon } from 'semantic-ui-react';
 import { CREATE_MESSAGE_MUTATION } from '../graphql/message';
-import FileUpload from './FileUpload';
 
 
 export default class sendMessage extends Component {
@@ -56,8 +55,10 @@ export default class sendMessage extends Component {
           return (
             <form onSubmit={e => this.handleSubmit(e, createMessage)}>
               <div className="sendMessage">
-                <div>
-                  <Icon name="plus" />
+                <div className="file-upload-container">
+                  <Button className="upload-button">
+                    <Icon name="plus" />
+                  </Button>
                   <input
                     type="file"
                     onChange={e => this.handleChange(e, createMessage)}

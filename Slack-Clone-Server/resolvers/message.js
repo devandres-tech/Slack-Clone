@@ -72,16 +72,18 @@ export default {
           const { url, filetype } = await processUpload(file);
           messageData.url = url;
           messageData.filetype = filetype;
+          console.log('url', url);
+          console.log('file', filetype);
         }
         if (!messageData.filetype) {
           messageData.filetype = 'text/plain';
         }
+        console.log('message data', message.dataValues);
         const message = await models.Message.create({
           ...messageData,
           userId: user.id,
         });
 
-        console.log(message.dataValues);
         const asyncFunc = async () => {
           const currentUser = await models.User.findOne({
             where: {

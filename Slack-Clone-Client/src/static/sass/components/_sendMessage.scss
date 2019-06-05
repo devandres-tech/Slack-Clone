@@ -4,7 +4,7 @@
   margin: 20px;
 
   display: grid;
-  // grid-template-columns: 4rem 1fr;
+  grid-template-columns: 4rem 1fr;
 
   & .ui.button {
     margin: 0;
@@ -20,4 +20,31 @@
       cursor: pointer;
     }
   }
+}
+
+.file-upload-container {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  height: 4rem;
+  width: 4rem;
+
+  & .upload-button {
+    position: absolute;
+    height: 4rem;
+    margin-left: 2rem;
+  }
+
+  input[type='file'] {
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    top: 0;
+    bottom: 0;
+    width: 4rem;
+    height: 4rem;
+    background-color: red;
+  }
+
+
 }
