@@ -28,12 +28,11 @@ export default class sendMessage extends Component {
 
   /** Handle uploading a file */
   handleChange = async ({ target: { validity, files: [file] } }, createMessage) => {
-    console.log('this is the file to upload', file);
     if (validity.valid) {
       const response = await createMessage({
         variables: { channelId: this.props.channelId, file },
       });
-      console.log(response);
+
       if (!response) {
         alert('Error Occurred while submitting message');
       }

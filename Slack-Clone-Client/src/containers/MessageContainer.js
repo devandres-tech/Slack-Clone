@@ -3,10 +3,31 @@ import { Comment } from 'semantic-ui-react';
 
 import { Query } from 'react-apollo';
 import { MESSAGE_SUBSCRIPTION, GET_MESSAGES } from '../graphql/message';
+import RenderText from '../components/RenderText';
 
 
 // used to hold the value of subscription
 let unsubscribe = null;
+
+// message component that detects the filetype
+const Message = ({ message: { url, text, filetype } }) => {
+  if (url) {
+    if (filetype.startsWith('image/')) {
+      return <img className="file-message" src={url} alt="file uploaded" />;
+    } if (filetype === 'text/plain') {
+      return <RenderText url={url} />;
+    } if (filetype.startsWith('audio/')) {
+      return (
+        <div>
+          <audio controls>
+            <source src={url} type={filetype} />
+          </audio>
+        </div>
+      );
+    }
+  }
+  return <Comment.Text>{text}</Comment.Text>;
+};
 
 class MessageContainer extends Component {
   componentWillReceiveProps(nextProps, nextContent) {
@@ -74,9 +95,7 @@ class MessageContainer extends Component {
                         </div>
 
                       </Comment.Metadata>
-                      {message.url
-                        ? <img src={`http://localhost:4040/${message.url}`} alt="file" className="file-message" />
-                        : <Comment.Text>{message.text}</Comment.Text>}
+                      <Message message={message} />
                       <Comment.Actions>
                         <Comment.Action>Reply</Comment.Action>
                       </Comment.Actions>
