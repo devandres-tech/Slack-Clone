@@ -37,15 +37,15 @@ export default (sequelize, DataTypes) => {
       },
     },
   },
-    {
-      hooks: {
-        afterValidate: async (user) => {
-          const hashedPassword = await bcrypt.hash(user.password, 12);
-          // eslint-disable-next-line no-param-reassign
-          user.password = hashedPassword;
-        },
+  {
+    hooks: {
+      afterValidate: async (user) => {
+        const hashedPassword = await bcrypt.hash(user.password, 12);
+        // eslint-disable-next-line no-param-reassign
+        user.password = hashedPassword;
       },
-    });
+    },
+  });
 
   // Define associations
   User.associate = (models) => {
@@ -56,9 +56,17 @@ export default (sequelize, DataTypes) => {
         field: 'user_id',
       },
     });
-    // N to M
+    // One to Many
     User.belongsToMany(models.Channel, {
       through: 'channel_member',
+      foreignKey: {
+        name: 'userId',
+        field: 'user_id',
+      },
+    });
+    // One to Many
+    User.belongsToMany(models.Channel, {
+      through: models.PrivateChannelMember,
       foreignKey: {
         name: 'userId',
         field: 'user_id',

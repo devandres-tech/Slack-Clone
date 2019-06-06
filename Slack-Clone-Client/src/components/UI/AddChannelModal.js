@@ -41,6 +41,8 @@ const AddChannelModal = ({
           {values.public ? null : (
             <Form.Field>
               <MultiSelectUsers
+                handleChange={(e, { value }) => setFieldValue('members', value)}
+                value={values.members}
                 teamId={teamId}
                 placeholder="select members to invite"
               />
@@ -73,9 +75,13 @@ const AddChannelModal = ({
 );
 
 export default withFormik({
-  mapPropsToValues: () => ({ public: true, name: '' }),
+  mapPropsToValues: () => ({ public: true, name: '', members: [] }),
   handleSubmit: async (values, { props: { onClose, teamId, createChannel }, setSubmitting }) => {
-    const response = await createChannel({ variables: { teamId, name: values.name } });
+    const response = await createChannel({
+      variables: {
+        teamId, name: values.name, public: values.public, members: values.members,
+      },
+    });
     console.log(response);
     onClose();
     setSubmitting(false);
