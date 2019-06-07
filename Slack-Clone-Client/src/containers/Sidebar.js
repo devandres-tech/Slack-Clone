@@ -35,7 +35,7 @@ export default class Sidebar extends Component {
 
   render() {
     const {
-      teams, team, username, teamIdx,
+      teams, team, username, teamIdx, currentUserId,
     } = this.props;
     const { openAddChannelModal, openInvitePeopleModal, openDirectMessageModal } = this.state;
 
@@ -73,6 +73,7 @@ export default class Sidebar extends Component {
             <AddChannelModal
               createChannel={createChannel}
               teamId={team.id}
+              currentUserId={currentUserId}
               onClose={this.handleAddChanelClick}
               open={openAddChannelModal}
               key="sidebar-add-channel-modal"
@@ -92,6 +93,7 @@ export default class Sidebar extends Component {
         </Mutation>
 
         <DirectMessageModal
+          currentUserId={currentUserId}
           teamId={team.id}
           onClose={this.handleDirectMessageClick}
           open={openDirectMessageModal}

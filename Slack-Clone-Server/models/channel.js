@@ -6,6 +6,10 @@ export default (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
     },
+    dm: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   });
 
   // Define associations

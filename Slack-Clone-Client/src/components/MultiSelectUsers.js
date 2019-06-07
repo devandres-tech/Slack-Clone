@@ -8,10 +8,10 @@ const MultiSelectUsers = ({
   handleChange,
   placeholder,
   teamId,
+  currentUserId,
 }) => (
   <Query query={GET_TEAM_MEMBERS_QUERY} variables={{ teamId }}>
       {({ loading, data }) => (
-
         loading ? null : (
           <Dropdown
             value={value}
@@ -21,7 +21,9 @@ const MultiSelectUsers = ({
             multiple
             search
             selection
-            options={data.getTeamMembers.map(teamMember => ({ key: teamMember.id, value: teamMember.id, text: teamMember.username }))}
+            options={data.getTeamMembers
+              .filter(member => member.id !== currentUserId)
+              .map(teamMember => ({ key: teamMember.id, value: teamMember.id, text: teamMember.username }))}
           />
         )
       )}

@@ -1,17 +1,25 @@
 import React from 'react';
 import {
-  Button, Modal, Input, Form,
+  Button, Modal, Form,
 } from 'semantic-ui-react';
-
-import Downshift from 'downshift';
-import { Query } from 'react-apollo';
+import { withFormik } from 'formik';
 import { withRouter } from 'react-router-dom';
 
+import { Query } from 'react-apollo';
 import { GET_TEAM_MEMBERS_QUERY } from '../../graphql/team';
+import MultiSelectUsers from '../MultiSelectUsers';
 
 
 const DirectMessageModal = ({
-  open, onClose, teamId, history,
+  open,
+  onClose,
+  teamId,
+  currentUserId,
+  values,
+  handleSubmit,
+  isSubmitting,
+  resetForm,
+  setFieldValue,
 }) => (
   <Query query={GET_TEAM_MEMBERS_QUERY} variables={{ teamId }}>
       {({ loading, data }) => (
@@ -20,57 +28,26 @@ const DirectMessageModal = ({
           <Modal.Content>
             <Form>
               <Form.Field>
-                {!loading && (
-                  <Downshift
-                    onChange={(selectedUser) => {
-                      history.push(`/view-team/user/${teamId}/${selectedUser.id}`);
-                      onClose();
-                    }
-                    }
-                    itemToString={item => (item ? item.value : '')}
-                  >
-                    {({
-                      getInputProps,
-                      getItemProps,
-                      getLabelProps,
-                      getMenuProps,
-                      isOpen,
-                      inputValue,
-                      highlightedIndex,
-                      selectedItem,
-                    }) => (
-                      <div>
-                          <label {...getLabelProps()} />
-                          <Input {...getInputProps()} fluid placeholder="Search for users..." />
-                          <ul {...getMenuProps()}>
-                            {isOpen
-                              ? data.getTeamMembers
-                                .filter(item => !inputValue || item.username.includes(inputValue))
-                                .map((item, index) => (
-                                  <li
-                                    {...getItemProps({
-                                      key: item.id,
-                                      index,
-                                      item,
-                                      style: {
-                                        backgroundColor:
-                                          highlightedIndex === index ? 'lightgray' : 'white',
-                                        fontWeight: selectedItem === item ? 'bold' : 'normal',
-                                      },
-                                    })}
-                                  >
-                                    {item.username}
-                                  </li>
-                                ))
-                              : null}
-                          </ul>
-                        </div>
-                    )}
-                  </Downshift>
-                )}
+                <MultiSelectUsers
+                  handleChange={(e, { value }) => setFieldValue('members', value)}
+                  value={values.members}
+                  teamId={teamId}
+                  currentUserId={currentUserId}
+                  placeholder="select members to message"
+                />
               </Form.Field>
               <Form.Group widths="equal" className="center">
-                <Button onClick={onClose} type="button">Cancel</Button>
+                <Button
+                  disabled={isSubmitting}
+                  onClick={(e) => {
+                    resetForm();
+                    onClose(e);
+                  }}
+                  type="button"
+                >
+                  Cancel
+                </Button>
+                <Button disabled={isSubmitting} onClick={handleSubmit} type="button">Start Messaging</Button>
               </Form.Group>
             </Form>
           </Modal.Content>
@@ -79,4 +56,11 @@ const DirectMessageModal = ({
     </Query>
 );
 
-export default withRouter(DirectMessageModal);
+export default withRouter(withFormik({
+  mapPropsToValues: () => ({ members: [] }),
+  handleSubmit: async (values, { props: { onClose }, setSubmitting }) => {
+    console.log('value', values.members);
+    onClose();
+    setSubmitting(false);
+  },
+})(DirectMessageModal));

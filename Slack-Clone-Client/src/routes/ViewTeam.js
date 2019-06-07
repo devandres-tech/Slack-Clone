@@ -17,7 +17,7 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
 
 
       // destructor teams from me query
-      const { username, teams } = me;
+      const { id: currentUserId, username, teams } = me;
 
       if (!teams.length) {
         return (<Redirect to="/create-team" />);
@@ -42,6 +42,7 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
             }))}
             team={currentTeam}
             teamIdx={teamIdx}
+            currentUserId={currentUserId}
             username={username}
             className="channels"
           />
