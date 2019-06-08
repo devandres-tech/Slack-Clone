@@ -4,9 +4,29 @@ import requiresAuth from '../permissions';
 
 export default {
   Mutation: {
+    getOrCreateChannel: requiresAuth.createResolver(async (parent, { teamId, members }, { models, user }) => {
+      members.push(user.id);
+      // check if dm channel already exists with these members
+      const response = await models.sequelize.query(`
+        select c.id 
+        from channels as c, private_channel_members as pc 
+        where pc.channel_id = c.id, c.dm = true, c.public = false, c.team_id = ${teamId}
+        group by c.id
+        having array_agg(pc.user_id) @> Array[${members.join(',')}] and count(pc.user_id) = ${members.length};
+      `, { raw: true });
+      console.log('res is ', response);
+      return 1;
+    }),
     createChannel: requiresAuth.createResolver(async (parent, args, { models, user }) => {
       try {
-        const member = await models.Member.findOne({ where: { teamId: args.teamId, userId: user.id } }, { raw: true });
+        const member = await models.Member.findOne(
+          {
+            where: { teamId: args.teamId, userId: user.id },
+          },
+          {
+            raw: true,
+          },
+        );
         if (!member.admin) {
           return {
             ok: false,

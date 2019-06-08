@@ -6,8 +6,7 @@ import Teams from '../components/Teams';
 import AddChannelModal from '../components/UI/AddChannelModal';
 import InvitePeopleModal from '../components/UI/InvitePeopleModal';
 import DirectMessageModal from '../components/UI/DirectMessageModal';
-import { GET_ME_QUERY, ADD_TEAM_MEMBER_MUTATION } from '../graphql/team';
-import { CREATE_CHANNEL_MUTATION } from '../graphql/channel';
+import { ADD_TEAM_MEMBER_MUTATION } from '../graphql/team';
 
 
 export default class Sidebar extends Component {
@@ -53,33 +52,14 @@ export default class Sidebar extends Component {
           channels={team.channels}
           users={team.directMessageMembers}
         />
-        <Mutation
-          mutation={CREATE_CHANNEL_MUTATION}
-          update={(cache, { data: { createChannel } }) => {
-            const { ok, channel } = createChannel;
-            if (!ok) {
-              return;
-            }
-            const response = cache.readQuery({ query: GET_ME_QUERY });
-            const channelToUpdate = response.me.teams[teamIdx].channels;
-
-            cache.writeQuery({
-              query: GET_ME_QUERY,
-              data: channelToUpdate.push(channel),
-            });
-          }}
-        >
-          {createChannel => (
-            <AddChannelModal
-              createChannel={createChannel}
-              teamId={team.id}
-              currentUserId={currentUserId}
-              onClose={this.handleAddChanelClick}
-              open={openAddChannelModal}
-              key="sidebar-add-channel-modal"
-            />
-          )}
-        </Mutation>
+        <AddChannelModal
+          teamIndex={teamIdx}
+          teamId={team.id}
+          currentUserId={currentUserId}
+          onClose={this.handleAddChanelClick}
+          open={openAddChannelModal}
+          key="sidebar-add-channel-modal"
+        />
         <Mutation mutation={ADD_TEAM_MEMBER_MUTATION}>
           {addTeamMember => (
             <InvitePeopleModal
