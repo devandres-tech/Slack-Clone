@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { Mutation } from 'react-apollo';
 
 import Channels from '../components/Channels';
 import Teams from '../components/Teams';
 import AddChannelModal from '../components/UI/AddChannelModal';
 import InvitePeopleModal from '../components/UI/InvitePeopleModal';
 import DirectMessageModal from '../components/UI/DirectMessageModal';
-import { ADD_TEAM_MEMBER_MUTATION } from '../graphql/team';
 
 
 export default class Sidebar extends Component {
@@ -60,17 +58,12 @@ export default class Sidebar extends Component {
           open={openAddChannelModal}
           key="sidebar-add-channel-modal"
         />
-        <Mutation mutation={ADD_TEAM_MEMBER_MUTATION}>
-          {addTeamMember => (
-            <InvitePeopleModal
-              addTeamMember={addTeamMember}
-              teamId={team.id}
-              onClose={this.handleInvitePeopleClick}
-              open={openInvitePeopleModal}
-              key="invite-people-modal"
-            />
-          )}
-        </Mutation>
+        <InvitePeopleModal
+          teamId={team.id}
+          onClose={this.handleInvitePeopleClick}
+          open={openInvitePeopleModal}
+          key="invite-people-modal"
+        />
 
         <DirectMessageModal
           currentUserId={currentUserId}
