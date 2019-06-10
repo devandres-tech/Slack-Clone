@@ -7,15 +7,36 @@ export default {
     getOrCreateChannel: requiresAuth.createResolver(async (parent, { teamId, members }, { models, user }) => {
       members.push(user.id);
       // check if dm channel already exists with these members
-      const response = await models.sequelize.query(`
+      const [data, result] = await models.sequelize.query(`
         select c.id 
         from channels as c, private_channel_members as pc 
-        where pc.channel_id = c.id, c.dm = true, c.public = false, c.team_id = ${teamId}
+        where pc.channel_id = c.id and c.dm = true and c.public = false and c.team_id = ${teamId}
         group by c.id
         having array_agg(pc.user_id) @> Array[${members.join(',')}] and count(pc.user_id) = ${members.length};
       `, { raw: true });
-      console.log('res is ', response);
-      return 1;
+      console.log('data and result', data, result);
+
+      if (data.length) {
+        return data[0].id;
+      }
+
+      const channelId = await models.sequelize.transaction(async (transaction) => {
+        const channel = await models.Channel.create({
+          name: 'hello',
+          public: false,
+          dm: true,
+          teamId,
+        }, { transaction });
+        // create the private channel with all of the members
+
+        // filter user if already on the members list
+        const cId = channel.dataValues.id;
+        const privateChannelMembers = members.map(m => ({ userId: m, channelId: cId }));
+        // create private channel
+        await models.PrivateChannelMember.bulkCreate(privateChannelMembers, { transaction });
+        return cId;
+      });
+      return channelId;
     }),
     createChannel: requiresAuth.createResolver(async (parent, args, { models, user }) => {
       try {
@@ -41,7 +62,7 @@ export default {
 
         const response = await models.sequelize.transaction(async (transaction) => {
           const channel = await models.Channel.create(args, { transaction });
-          // create the private channel with all of the memebers
+          // create the private channel with all of the members
           if (!args.public) {
             // filter user if already on the members list
             const members = args.members.filter(m => m !== user.id);

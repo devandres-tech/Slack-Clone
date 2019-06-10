@@ -11,3 +11,10 @@ export const CREATE_CHANNEL_MUTATION = gql`
   }
 }
 `;
+
+export const GET_OR_CREATE_CHANNEL_MUTATION = gql`
+  mutation ($teamId: Int!, $members: [Int!]!) {
+    getOrCreateChannel(teamId: $teamId, members: $members)
+  }
+
+`;

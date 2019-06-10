@@ -64,7 +64,6 @@ export default class Sidebar extends Component {
           open={openInvitePeopleModal}
           key="invite-people-modal"
         />
-
         <DirectMessageModal
           currentUserId={currentUserId}
           teamId={team.id}
