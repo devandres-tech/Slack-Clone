@@ -12,7 +12,7 @@ const channel = ({ id, name }, teamId) => (
   </Link>
 );
 const displayDmChannel = ({ id, name }, teamId) => (
-  <Link key={`user-${id}`} to={`/view-team/user/${teamId}/${id}`}>
+  <Link key={`user-${id}`} to={`/view-team/${teamId}/${id}`}>
     <li>
       #
       {name}

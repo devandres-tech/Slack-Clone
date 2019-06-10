@@ -7,7 +7,6 @@ export default ({ channelName }) => (
       #
       {channelName}
       {' '}
-      eat ass
     </Header>
   </div>
 );
