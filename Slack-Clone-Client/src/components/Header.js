@@ -6,6 +6,8 @@ export default ({ channelName }) => (
     <Header textAlign="center">
       #
       {channelName}
+      {' '}
+      eat ass
     </Header>
   </div>
 );

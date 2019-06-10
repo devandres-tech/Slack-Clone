@@ -11,11 +11,11 @@ const channel = ({ id, name }, teamId) => (
     </li>
   </Link>
 );
-const user = ({ id, username }, teamId) => (
+const displayDmChannel = ({ id, name }, teamId) => (
   <Link key={`user-${id}`} to={`/view-team/user/${teamId}/${id}`}>
     <li>
       #
-      {username}
+      {name}
     </li>
   </Link>
 );
@@ -24,7 +24,7 @@ export default ({
   teamName,
   username,
   channels,
-  users,
+  directMessageChannels,
   onAddChannelClick,
   teamId,
   onInvitePeopleClick,
@@ -53,7 +53,7 @@ export default ({
             Direct Messages
             <Icon onClick={onDirectMessageClick} name="plus circle" />
           </li>
-          {users.map(u => user(u, teamId))}
+          {directMessageChannels.map(dmChannel => displayDmChannel(dmChannel, teamId))}
         </ul>
       </div>
       {isOwner && (

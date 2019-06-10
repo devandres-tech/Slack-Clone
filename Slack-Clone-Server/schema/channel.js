@@ -6,6 +6,7 @@ export default `
     public: Boolean!
     messages: [Message!]!
     users: [User!]
+    dm: Boolean!
   }
 
   type ChannelResponse {

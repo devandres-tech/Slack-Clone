@@ -11,6 +11,7 @@ export default ({ userId }) => (
   >
     {({ loading, error, data: { getUser } }) => {
       if (loading) return <p>Loading...</p>;
+      console.log('data', userId);
       return (
         <div className="header">
           <Header textAlign="center">
