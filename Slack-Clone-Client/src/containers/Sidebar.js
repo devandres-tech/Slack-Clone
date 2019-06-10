@@ -38,7 +38,6 @@ export default class Sidebar extends Component {
 
     const regularChannels = [];
     const directMessageChannels = [];
-    console.log('team', team);
     team.channels.forEach((channel) => {
       if (channel.dm) {
         directMessageChannels.push(channel);
