@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Comment } from 'semantic-ui-react';
+import { Comment, Button } from 'semantic-ui-react';
 
 import { Query } from 'react-apollo';
 import { MESSAGE_SUBSCRIPTION, GET_MESSAGES } from '../graphql/message';
@@ -30,6 +30,10 @@ const Message = ({ message: { url, text, filetype } }) => {
 };
 
 class MessageContainer extends Component {
+  state = {
+    hasMoreItems: true,
+  }
+
   componentWillReceiveProps(nextProps, nextContent) {
     if (this.props.channelId !== nextProps.channelId) {
       if (unsubscribe) {
@@ -53,14 +57,13 @@ class MessageContainer extends Component {
 
   render() {
     return (
-
       <Query
         query={GET_MESSAGES}
         fetchPolicy="network-only"
-        variables={{ channelId: this.props.channelId }}
+        variables={{ offset: 0, channelId: this.props.channelId }}
       >
         {({
-          loading, error, data: { messages }, subscribeToMore,
+          loading, error, data: { messages }, subscribeToMore, fetchMore,
         }) => {
           if (loading) return <p>Loading...</p>;
           if (error) return <p>Error ocurred</p> || console.log(error);
@@ -85,6 +88,31 @@ class MessageContainer extends Component {
           return (
             <div className="messages">
               <Comment.Group>
+                {this.state.hasMoreItems && (
+                  <Button onClick={() => {
+                    fetchMore({
+                      variables: {
+                        channelId: this.props.channelId,
+                        offset: messages.length,
+                      },
+                      updateQuery: (prev, { fetchMoreResult }) => {
+                        console.log('PREV: ', prev);
+                        console.log('MORE', fetchMoreResult);
+                        if (!fetchMoreResult) return prev;
+                        if (fetchMoreResult.messages.length < 25) {
+                          this.setState({ hasMoreItems: false });
+                        }
+                        return {
+                          ...prev,
+                          messages: [...prev.messages, ...fetchMoreResult.messages],
+                        };
+                      },
+                    });
+                  }}
+                  >
+                    Load more
+                  </Button>
+                )}
                 {messages.map(message => (
                   <Comment key={`${message.id}-message`}>
                     <Comment.Content>

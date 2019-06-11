@@ -59,7 +59,7 @@ export default {
   },
 
   Query: {
-    messages: requiresAuth.createResolver(async (parent, { channelId }, { models, user }) => {
+    messages: requiresAuth.createResolver(async (parent, { offset, channelId }, { models, user }) => {
       // check if the channel is public
       const channel = await models.Channel.findOne({ raw: true, where: { id: channelId } });
       // Guard messages for private channels
@@ -74,7 +74,9 @@ export default {
       }
 
       return models.Message.findAll(
-        { order: [['created_at', 'ASC']], where: { channelId } },
+        {
+          order: [['created_at', 'ASC']], where: { channelId }, limit: 25, offset,
+        },
         { raw: true },
       );
     }),
