@@ -89,7 +89,7 @@ class AddChannelModal extends Component {
                 <Form.Field>
                   <Checkbox
                     onChange={(e, { checked }) => this.setState({ isPublic: !checked })}
-                    value={!isPublic}
+                    checked={!isPublic}
                     label="Private"
                     toggle
                   />

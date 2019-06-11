@@ -3,6 +3,7 @@ import {
   Button, Modal, Form,
 } from 'semantic-ui-react';
 import { Mutation } from 'react-apollo';
+import { withRouter } from 'react-router-dom';
 
 import { GET_OR_CREATE_CHANNEL_MUTATION } from '../../graphql/channel';
 import MultiSelectUsers from '../MultiSelectUsers';
@@ -19,9 +20,11 @@ class DirectMessageModal extends Component {
   }
 
   handleSubmit = async (getOrCreateChannel) => {
-    const { onClose } = this.props;
-    await getOrCreateChannel();
+    const { onClose, history, teamId } = this.props;
+    const response = await getOrCreateChannel();
+    const { id } = response.data.getOrCreateChannel;
     onClose();
+    history.push(`/view-team/${teamId}/${id}`);
   }
 
   render() {
@@ -74,4 +77,4 @@ class DirectMessageModal extends Component {
   }
 }
 
-export default DirectMessageModal;
+export default withRouter(DirectMessageModal);
