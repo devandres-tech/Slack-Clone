@@ -80,7 +80,7 @@ class MessageContainer extends Component {
 
                 return {
                   ...prev,
-                  messages: [...prev.messages, subscriptionData.data.newChannelMessage],
+                  messages: [subscriptionData.data.newChannelMessage, ...prev.messages],
                 };
               },
             });
@@ -88,7 +88,7 @@ class MessageContainer extends Component {
           return (
             <div className="messages">
               <Comment.Group>
-                {this.state.hasMoreItems && (
+                {this.state.hasMoreItems && messages.length >= 25 && (
                   <Button onClick={() => {
                     fetchMore({
                       variables: {
@@ -96,8 +96,6 @@ class MessageContainer extends Component {
                         offset: messages.length,
                       },
                       updateQuery: (prev, { fetchMoreResult }) => {
-                        console.log('PREV: ', prev);
-                        console.log('MORE', fetchMoreResult);
                         if (!fetchMoreResult) return prev;
                         if (fetchMoreResult.messages.length < 25) {
                           this.setState({ hasMoreItems: false });
@@ -113,7 +111,7 @@ class MessageContainer extends Component {
                     Load more
                   </Button>
                 )}
-                {messages.map(message => (
+                {[...messages].reverse().map(message => (
                   <Comment key={`${message.id}-message`}>
                     <Comment.Content>
                       <Comment.Author as="a">{message.user.username}</Comment.Author>
@@ -134,7 +132,6 @@ class MessageContainer extends Component {
             </div>
           );
         }}
-
       </Query>
     );
   }

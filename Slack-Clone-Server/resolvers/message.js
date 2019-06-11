@@ -75,7 +75,7 @@ export default {
 
       return models.Message.findAll(
         {
-          order: [['created_at', 'ASC']], where: { channelId }, limit: 25, offset,
+          order: [['created_at', 'DESC']], where: { channelId }, limit: 25, offset,
         },
         { raw: true },
       );
