@@ -41,14 +41,6 @@ class MessageContainer extends Component {
         unsubscribe = null;
       }
     }
-
-    // if (this.scroller && this.scroller < 225) {
-    //   const heightBeforeRender = this.scroller.scrollHeight;
-    //   console.log('hi');
-    //   setTimeout(() => {
-    //     this.scroller.scrollTop = this.scroller.scrollHeight - heightBeforeRender;
-    //   }, 120);
-    // }
   }
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {

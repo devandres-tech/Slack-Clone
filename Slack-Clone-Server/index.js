@@ -1,9 +1,8 @@
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
-import { makeExecutableSchema } from 'graphql-tools';
 import dotenv from 'dotenv';
 import path from 'path';
-
+import DataLoader from 'dataloader';
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
@@ -11,7 +10,7 @@ import http from 'http';
 
 
 import { refreshTokens } from './auth';
-
+import { channelBatcher } from './batchFunctions';
 import models from './models';
 
 const SECRET = 'mysupresecretstring!';
@@ -74,6 +73,8 @@ const server = new ApolloServer({
     user: connection ? connection.context : req.user,
     SECRET,
     SECRET2,
+    // Make new dataloader per request due to caching
+    channelLoader: new DataLoader(ids => channelBatcher(ids, models, req.user)),
   }),
   uploads: {
     maxFileSize: 10000000, // 10 MB

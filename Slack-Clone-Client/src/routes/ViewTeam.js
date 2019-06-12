@@ -15,7 +15,6 @@ const ViewTeam = ({ match: { params: { teamId, channelId } } }) => (
     {({ loading, data: { me } }) => {
       if (loading) return null;
 
-
       // destructor teams from me query
       const { id: currentUserId, username, teams } = me;
 
