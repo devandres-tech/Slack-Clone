@@ -41,6 +41,14 @@ class MessageContainer extends Component {
         unsubscribe = null;
       }
     }
+
+    // if (this.scroller && this.scroller < 225) {
+    //   const heightBeforeRender = this.scroller.scrollHeight;
+    //   console.log('hi');
+    //   setTimeout(() => {
+    //     this.scroller.scrollTop = this.scroller.scrollHeight - heightBeforeRender;
+    //   }, 120);
+    // }
   }
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {
@@ -55,6 +63,33 @@ class MessageContainer extends Component {
     }
   }
 
+  // Make api request when the user reached the top of the page
+  handleScroll = (messages, fetchMore) => {
+    if (
+      this.scroller
+      && this.scroller.scrollTop < 3
+      && this.state.hasMoreItems
+      && messages.length >= 25
+    ) {
+      fetchMore({
+        variables: {
+          channelId: this.props.channelId,
+          offset: messages.length,
+        },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult) return prev;
+          if (fetchMoreResult.messages.length < 25) {
+            this.setState({ hasMoreItems: false });
+          }
+          return {
+            ...prev,
+            messages: [...prev.messages, ...fetchMoreResult.messages],
+          };
+        },
+      });
+    }
+  }
+
   render() {
     return (
       <Query
@@ -66,6 +101,7 @@ class MessageContainer extends Component {
           loading, error, data: { messages }, subscribeToMore, fetchMore,
         }) => {
           if (loading) return <p>Loading...</p>;
+
           if (error) return <p>Error ocurred</p> || console.log(error);
           if (!unsubscribe) {
             unsubscribe = subscribeToMore({
@@ -77,6 +113,11 @@ class MessageContainer extends Component {
                 if (!subscriptionData) {
                   return prev;
                 }
+                // if page is at the top set page to the bottom to see the new message
+                if (this.scroller && this.scroller.scrollTop < 100) {
+                  const heightBeforeRender = this.scroller.scrollHeight;
+                  this.scroller.scrollTop = heightBeforeRender;
+                }
 
                 return {
                   ...prev,
@@ -86,31 +127,12 @@ class MessageContainer extends Component {
             });
           }
           return (
-            <div className="messages">
+            <div
+              className="messages"
+              ref={(scroller) => { this.scroller = scroller; }}
+              onScroll={() => this.handleScroll(messages, fetchMore)}
+            >
               <Comment.Group>
-                {this.state.hasMoreItems && messages.length >= 25 && (
-                  <Button onClick={() => {
-                    fetchMore({
-                      variables: {
-                        channelId: this.props.channelId,
-                        offset: messages.length,
-                      },
-                      updateQuery: (prev, { fetchMoreResult }) => {
-                        if (!fetchMoreResult) return prev;
-                        if (fetchMoreResult.messages.length < 25) {
-                          this.setState({ hasMoreItems: false });
-                        }
-                        return {
-                          ...prev,
-                          messages: [...prev.messages, ...fetchMoreResult.messages],
-                        };
-                      },
-                    });
-                  }}
-                  >
-                    Load more
-                  </Button>
-                )}
                 {[...messages].reverse().map(message => (
                   <Comment key={`${message.id}-message`}>
                     <Comment.Content>
