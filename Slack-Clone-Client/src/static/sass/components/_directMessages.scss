@@ -1,0 +1,41 @@
+.direct-messages {
+  margin-top: 4rem;
+
+  &__heading {
+    font-size: 1.6rem;
+    color: $font-color;
+
+    &>i {
+      padding-left: 4.5rem;
+    }
+  }
+
+  &__container * {
+    color: $font-color;
+    padding-bottom: .8rem;
+
+    & :hover {
+      background-color: $slack-purple-dark-2;
+      color: $color-white;
+    }
+  }
+
+  &__invite-people {
+    padding-top: 4rem;
+
+
+    &>a {
+      color: $font-color;
+      width: inherit;
+
+      &:hover {
+        background-color: $slack-purple-dark-2;
+        color: $color-white;
+      }
+
+      &>i {
+        padding-right: 1rem;
+      }
+    }
+  }
+}

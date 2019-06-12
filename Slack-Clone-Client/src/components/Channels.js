@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const channel = ({ id, name }, teamId) => (
   <Link key={`channel-${id}`} to={`/view-team/${teamId}/${id}`}>
     <li>
-      #
+      <span id="channels__hashtag">#</span>
       {name}
     </li>
   </Link>
@@ -14,7 +14,7 @@ const channel = ({ id, name }, teamId) => (
 const displayDmChannel = ({ id, name }, teamId) => (
   <Link key={`user-${id}`} to={`/view-team/${teamId}/${id}`}>
     <li>
-      #
+      <span id="channels__hashtag">#</span>
       {name}
     </li>
   </Link>
@@ -38,8 +38,8 @@ export default ({
           {username}
         </div>
         <div>
-          <ul>
-            <li>
+          <ul className="channels__list">
+            <li className="channels__heading">
               Channels
               {' '}
               {isOwner && <Icon onClick={onAddChannelClick} name="plus circle" />}
@@ -47,22 +47,23 @@ export default ({
             {channels.map(c => channel(c, teamId))}
           </ul>
         </div>
-        <div>
-          <ul>
-            <li>
+        <div className="direct-messages">
+          <ul className="direct-messages__container">
+            <li className="direct-messages__heading">
               Direct Messages
               <Icon onClick={onDirectMessageClick} name="plus circle" />
             </li>
             {directMessageChannels.map(dmChannel => displayDmChannel(dmChannel, teamId))}
           </ul>
+          {isOwner && (
+            <div className="direct-messages__invite-people">
+              <a href="#invite-people" onClick={onInvitePeopleClick}>
+                <i className="fas fa-plus" />
+                Invite People
+              </a>
+            </div>
+          )}
         </div>
-        {isOwner && (
-          <div>
-            <a href="#invite-people" onClick={onInvitePeopleClick}>
-              + Invite People
-            </a>
-          </div>
-        )}
       </div>
     </div>
 );

@@ -2,14 +2,38 @@
   grid-column: 2;
   grid-row: 1 / 4;
   background-color: $slack-purple;
-  color: #958993;
+  color: $font-color;
 
   &__container {
     padding-left: 2rem;
   }
 
+  &__list * {
+    padding-bottom: .4rem;
+    color: $font-color;
+
+    & :hover {
+      background-color: $slack-purple-dark-2;
+      color: $color-white;
+    }
+  }
+
+  &__heading {
+    font-size: 1.6rem;
+    padding-bottom: .8rem;
+
+    &>i {
+      margin-left: 9rem;
+
+      &:hover {
+        color: $color-white;
+        cursor: pointer;
+      }
+    }
+  }
+
   &__header {
-    padding-bottom: 2rem;
+    padding-bottom: 4rem;
 
     &-title {
       font-size: 2.1rem;
@@ -18,4 +42,9 @@
     }
   }
 
+}
+
+#channels__hashtag {
+  color: #817d80;
+  padding-right: .6rem;
 }

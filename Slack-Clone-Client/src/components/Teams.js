@@ -7,7 +7,7 @@ export default ({ teams }) => (
   <div className="teams">
     <ul>
       {teams.map(team)}
-      <Link classname="teams__addChannel" key="add-team" to="/create-team"><li>+</li></Link>
+      <Link className="teams__addChannel" key="add-team" to="/create-team"><i className="fas fa-plus" /></Link>
     </ul>
   </div>
 );

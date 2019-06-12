@@ -1,0 +1,63 @@
+.home-container {
+  padding-top: 25rem;
+  text-align: center;
+  height: 100vh;
+  width: 100%;
+  background-color: $slack-purple;
+
+  .home-container__description {
+    padding-bottom: 8rem;
+  }
+
+  &__title {
+    padding-bottom: 1rem;
+    font-size: 5rem;
+    color: $color-white;
+
+    &>i {
+      padding-left: 1rem;
+    }
+  }
+
+  &__info {
+    font-size: 1.6rem;
+    color: rgb(168, 167, 167);
+    margin: 0 auto;
+    width: 40rem;
+  }
+
+  .home-container__authentication {
+    padding-bottom: 2rem;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    font-size: 30rem;
+
+    &--login {
+      padding-right: 1rem;
+      color: rgb(196, 196, 196);
+      cursor: pointer;
+      transition: all .5s;
+
+      &:hover {
+        color: $color-white;
+        transition: all .5s;
+      }
+    }
+  }
+
+}
+
+.copyright {
+  color: $color-white;
+
+  &__link {
+    color: rgb(184, 83, 224);
+    transition: all .5s;
+
+    &:hover {
+      color: $color-white;
+      transition: all .5s;
+    }
+  }
+}
