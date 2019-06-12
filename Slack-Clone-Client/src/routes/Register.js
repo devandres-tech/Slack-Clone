@@ -49,7 +49,6 @@ export default class Register extends Component {
       });
       this.setState(err);
     }
-    console.log(response);
   };
 
   render() {

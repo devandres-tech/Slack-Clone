@@ -9,6 +9,7 @@ import Register from './Register';
 import Login from './Login';
 import CreateTeam from './CreateTeam';
 import ViewTeam from './ViewTeam';
+import NotFound from './NotFound';
 
 
 const isAuthenticated = () => {
@@ -46,6 +47,7 @@ export default () => (
       <Route path="/login" exact component={Login} />
       <PrivateRoute path="/view-team/:teamId?/:channelId?" exact component={ViewTeam} />
       <PrivateRoute path="/create-team" exact component={CreateTeam} />
+      <Route component={NotFound} />
     </Switch>
   </BrowserRouter>
 );

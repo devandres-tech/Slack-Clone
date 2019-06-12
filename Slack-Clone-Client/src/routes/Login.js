@@ -40,8 +40,6 @@ export default observer(class Login extends Component {
       });
       this.errors = err;
     }
-
-    console.log(response);
   };
 
   onChange = (e) => {
