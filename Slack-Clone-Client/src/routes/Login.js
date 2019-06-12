@@ -5,7 +5,9 @@ import {
   Button, Input, Container, Header, Form, Message,
 } from 'semantic-ui-react';
 import { Mutation } from 'react-apollo';
+
 import { LOGIN_MUTATION } from '../graphql/user';
+import { wsLink } from '../apollo';
 
 
 export default observer(class Login extends Component {
@@ -29,13 +31,11 @@ export default observer(class Login extends Component {
     if (ok) {
       localStorage.setItem('token', token);
       localStorage.setItem('refreshToken', refreshToken);
-      console.log('token from login', token);
-      console.log('refresh token from login', refreshToken);
+      wsLink.subscriptionClient.tryReconnect();
       this.props.history.push('/view-team');
     } else {
       const err = {};
       errors.forEach(({ path, message }) => {
-        // err['passwordError'] = 'too long...'
         err[`${path}Error`] = message;
       });
       this.errors = err;

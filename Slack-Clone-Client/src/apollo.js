@@ -42,12 +42,12 @@ const afterwareLink = new ApolloLink((operation, forward) => forward(operation).
 const httpLinkWithMiddleware = afterwareLink.concat(middlewareLink.concat(httpLink));
 
 // Create a WebSocket link:
-const wsLink = new WebSocketLink({
+export const wsLink = new WebSocketLink({
   uri: 'ws://localhost:4040/graphql',
   options: {
     reconnect: true,
     connectionParams: () => ({
-      token: console.log('connectionParams token: ', localStorage.getItem('token')) || localStorage.getItem('token'),
+      token: localStorage.getItem('token'),
       refreshToken: localStorage.getItem('refreshToken'),
     }),
   },
