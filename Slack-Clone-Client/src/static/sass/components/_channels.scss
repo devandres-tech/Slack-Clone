@@ -1,6 +1,21 @@
 .channels {
   grid-column: 2;
   grid-row: 1 / 4;
-  background-color: #3f0e40;
+  background-color: $slack-purple;
   color: #958993;
+
+  &__container {
+    padding-left: 2rem;
+  }
+
+  &__header {
+    padding-bottom: 2rem;
+
+    &-title {
+      font-size: 2.1rem;
+      color: $color-white;
+      padding-bottom: .3rem;
+    }
+  }
+
 }

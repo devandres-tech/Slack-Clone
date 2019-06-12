@@ -1,8 +1,12 @@
+@import "abstracts/variables";
+
 @import "base/base";
 @import "base/utils";
+
 @import "components/channels";
 @import "components/header";
 @import "components/messages";
 @import "components/sendMessage";
 @import "components/teams";
+
 @import "layout/appLayout";

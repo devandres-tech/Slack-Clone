@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Comment, Button } from 'semantic-ui-react';
+import { Comment } from 'semantic-ui-react';
 
 import { Query } from 'react-apollo';
 import { MESSAGE_SUBSCRIPTION, GET_MESSAGES } from '../graphql/message';
 import RenderText from '../components/RenderText';
 
 
-// used to hold the value of subscription
+// variable used to hold the value of the subscription
 let unsubscribe = null;
 
 // message component that detects the filetype

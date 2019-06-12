@@ -1,6 +1,30 @@
 .teams {
   grid-column: 1;
   grid-row: 1 / 4;
-  background-color: #200720;
+  background-color: $slack-purple-dark;
   color: #fff;
+  padding-top: 1rem;
+
+  &__container {
+    height: 4rem;
+    width: 4rem;
+    background-color: rgb(163, 158, 158);
+    padding-top: 1.2rem;
+    padding-left: 1.4rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    margin-left: 1.4rem;
+    color: black;
+    border: solid rgb(163, 158, 158) 1px;
+
+    &:hover {
+      transition: all .3s;
+      border: solid rgb(198, 199, 165) 2px;
+      background-color: rgb(214, 214, 214)
+    }
+  }
+
+  &__addChannel {
+    background-color: red;
+  }
 }
