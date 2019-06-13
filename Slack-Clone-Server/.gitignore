@@ -9,3 +9,7 @@ file-uploads
 # bild folder
 dist
 
+# postgres data
+pgdata
+
+docker-compose.yml
