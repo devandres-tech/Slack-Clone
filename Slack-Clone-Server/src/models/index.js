@@ -2,6 +2,7 @@ import Sequelize from 'sequelize';
 
 const sequelize = new Sequelize(process.env.TEST_DB || 'slack', 'postgres', 'barcelona10', {
   dialect: 'postgres',
+  host: process.env.DB_HOST || 'localhost',
   define: {
     underscored: true,
   },

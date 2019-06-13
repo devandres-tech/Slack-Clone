@@ -92,8 +92,8 @@ server.installSubscriptionHandlers(httpServer);
 // sync() will create all tables if they doesn't exist in database
 // before running the sever
 models.sequelize.sync({}).then(() => {
-  httpServer.listen(process.env.PORT, () => {
-    console.log(`🚀 Server ready at http://localhost:${process.env.PORT}${server.graphqlPath}`);
-    console.log(`🚀 Subscriptions ready at ws://localhost:${process.env.PORT}${server.subscriptionsPath}`);
+  httpServer.listen(4040, () => {
+    console.log(`🚀 Server ready at http://localhost:4040${server.graphqlPath}`);
+    console.log(`🚀 Subscriptions ready at ws://localhost:4040${server.subscriptionsPath}`);
   });
 });

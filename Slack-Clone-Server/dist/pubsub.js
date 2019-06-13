@@ -9,8 +9,8 @@ var _graphqlRedisSubscriptions = require("graphql-redis-subscriptions");
 
 var _default = new _graphqlRedisSubscriptions.RedisPubSub({
   connection: {
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT,
+    host: process.env.REDIS_HOST || '127.0.0.1',
+    port: 6379,
     retry_strategy: options => Math.max(options.attempt * 100, 3000)
   }
 });

@@ -11,6 +11,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 const sequelize = new _sequelize.default(process.env.TEST_DB || 'slack', 'postgres', 'barcelona10', {
   dialect: 'postgres',
+  host: process.env.DB_HOST || 'localhost',
   define: {
     underscored: true
   }
