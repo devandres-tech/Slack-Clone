@@ -6,15 +6,15 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 /** Create a 'User' table */
-var _default = function _default(sequelize, DataTypes) {
-  var Team = sequelize.define('team', {
+var _default = (sequelize, DataTypes) => {
+  const Team = sequelize.define('team', {
     name: {
       type: DataTypes.STRING,
       unique: true
     }
   }); // Define associations
 
-  Team.associate = function (models) {
+  Team.associate = models => {
     Team.belongsToMany(models.User, {
       through: models.Member,
       foreignKey: {

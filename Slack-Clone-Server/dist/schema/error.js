@@ -4,5 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _default = "\n  type Error {\n    path: String!\n    message: String\n  }\n";
+var _default = `
+  type Error {
+    path: String!
+    message: String
+  }
+`;
 exports.default = _default;

@@ -6,12 +6,12 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 /** Create a 'User' table */
-var _default = function _default(sequelize, DataTypes) {
-  var DirectMessage = sequelize.define('direct_messages', {
+var _default = (sequelize, DataTypes) => {
+  const DirectMessage = sequelize.define('direct_messages', {
     text: DataTypes.STRING
   }); // Define associations
 
-  DirectMessage.associate = function (models) {
+  DirectMessage.associate = models => {
     // 1:M
     DirectMessage.belongsTo(models.Team, {
       foreignKey: {

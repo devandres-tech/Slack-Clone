@@ -1,7 +1,5 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -9,13 +7,15 @@ exports.default = void 0;
 
 var _sequelize = _interopRequireDefault(require("sequelize"));
 
-var sequelize = new _sequelize.default(process.env.TEST_DB || 'slack', 'postgres', 'barcelona10', {
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const sequelize = new _sequelize.default(process.env.TEST_DB || 'slack', 'postgres', 'barcelona10', {
   dialect: 'postgres',
   define: {
     underscored: true
   }
 });
-var models = {
+const models = {
   // models
   User: sequelize.import('./user'),
   Channel: sequelize.import('./channel'),
@@ -25,7 +25,7 @@ var models = {
   DirectMessage: sequelize.import('./directMessages'),
   PrivateChannelMember: sequelize.import('./privateChannelMember')
 };
-Object.keys(models).forEach(function (modelName) {
+Object.keys(models).forEach(modelName => {
   // Associate models if they have an associate method
   if ('associate' in models[modelName]) {
     models[modelName].associate(models);

@@ -6,14 +6,14 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 /** Create a 'User' table */
-var _default = function _default(sequelize, DataTypes) {
-  var Message = sequelize.define('message', {
+var _default = (sequelize, DataTypes) => {
+  const Message = sequelize.define('message', {
     text: DataTypes.STRING,
     url: DataTypes.STRING,
     filetype: DataTypes.STRING
   }); // Define associations
 
-  Message.associate = function (models) {
+  Message.associate = models => {
     // 1:M
     Message.belongsTo(models.Channel, {
       foreignKey: {

@@ -1,21 +1,17 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
 
-var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
-
-var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
-
 var _bcrypt = _interopRequireDefault(require("bcrypt"));
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /** Create a 'User' table */
-var _default = function _default(sequelize, DataTypes) {
-  var User = sequelize.define('user', {
+var _default = (sequelize, DataTypes) => {
+  const User = sequelize.define('user', {
     username: {
       type: DataTypes.STRING,
       unique: true,
@@ -51,41 +47,15 @@ var _default = function _default(sequelize, DataTypes) {
     }
   }, {
     hooks: {
-      afterValidate: function () {
-        var _afterValidate = (0, _asyncToGenerator2.default)(
-        /*#__PURE__*/
-        _regenerator.default.mark(function _callee(user) {
-          var hashedPassword;
-          return _regenerator.default.wrap(function _callee$(_context) {
-            while (1) {
-              switch (_context.prev = _context.next) {
-                case 0:
-                  _context.next = 2;
-                  return _bcrypt.default.hash(user.password, 12);
+      afterValidate: async user => {
+        const hashedPassword = await _bcrypt.default.hash(user.password, 12); // eslint-disable-next-line no-param-reassign
 
-                case 2:
-                  hashedPassword = _context.sent;
-                  // eslint-disable-next-line no-param-reassign
-                  user.password = hashedPassword;
-
-                case 4:
-                case "end":
-                  return _context.stop();
-              }
-            }
-          }, _callee);
-        }));
-
-        function afterValidate(_x) {
-          return _afterValidate.apply(this, arguments);
-        }
-
-        return afterValidate;
-      }()
+        user.password = hashedPassword;
+      }
     }
   }); // Define associations
 
-  User.associate = function (models) {
+  User.associate = models => {
     User.belongsToMany(models.Team, {
       through: models.Member,
       foreignKey: {

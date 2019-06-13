@@ -5,8 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _default = function _default(sequelize) {
-  var PrivateChannelMember = sequelize.define('private_channel_member', {});
+var _default = sequelize => {
+  const PrivateChannelMember = sequelize.define('private_channel_member', {});
   return PrivateChannelMember;
 };
 
