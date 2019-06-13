@@ -51,6 +51,15 @@ app.use(addUser);
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: async ({ req, connection }) => ({
+    models,
+    user: connection ? connection.context : req.user,
+    SECRET,
+    SECRET2,
+    // Make new dataloader per request due to caching
+    channelLoader: new DataLoader(ids => channelBatcher(ids, models, req.user)),
+    // serverUrl: `${req.protocol}://${req.get('host')}`,
+  }),
   subscriptions: {
     onConnect: async ({ token, refreshToken }, webSocket) => {
       if (token && refreshToken) {
@@ -64,18 +73,9 @@ const server = new ApolloServer({
           return { models, user: newTokens.user };
         }
       }
-
       return { models };
     },
   },
-  context: async ({ req, connection }) => ({
-    models,
-    user: connection ? connection.context : req.user,
-    SECRET,
-    SECRET2,
-    // Make new dataloader per request due to caching
-    channelLoader: new DataLoader(ids => channelBatcher(ids, models, req.user)),
-  }),
   uploads: {
     maxFileSize: 10000000, // 10 MB
     maxFiles: 20,

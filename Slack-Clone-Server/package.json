@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node index.js",
-    "test-server": "./reset_test_db.sh; TEST_DB=testslack babel-node index.js",
+    "build": "babel src -d dist",
+    "serve": "node dist/index.js",
+    "start": "nodemon --exec babel-node src/index.js",
+    "test-server": "./reset_test_db.sh; TEST_DB=testslack babel-node src/index.js",
     "test": "jest"
   },
   "jest": {
@@ -19,6 +21,7 @@
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.3.4",
     "@babel/node": "^7.2.2",
+    "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.3.4",
     "axios": "^0.18.0",
     "babel-jest": "^24.1.0",
@@ -34,6 +37,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
+    "@babel/runtime": "^7.4.5",
     "apollo-server-express": "^2.3.3",
     "bcrypt": "^3.0.3",
     "body-parser": "^1.18.3",
