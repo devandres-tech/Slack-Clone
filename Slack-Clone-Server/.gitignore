@@ -1,3 +1,11 @@
 node_modules
 
+# user uploads
 file-uploads
+
+# env variables
+.env
+
+# bild folder
+dist
+
