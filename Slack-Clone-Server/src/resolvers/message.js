@@ -49,7 +49,7 @@ export default {
 
   Message: {
     // set url for static files
-    url: parent => (parent.url ? `http://localhost:4040/${parent.url}` : parent.url),
+    url: parent => (parent.url ? `${process.env.SERVER_URL} || http://localhost:4040/${parent.url}` : parent.url),
     user: ({ user, userId }, args, { models }) => {
       if (user) {
         return user;
