@@ -90,7 +90,7 @@ getModels().then((models) => {
     },
   });
 
-  app.use('/file-uploads', express.static('./file-uploads'));
+  app.use('/file-uploads', express.static('file-uploads'));
   server.applyMiddleware({ app });
   const httpServer = http.createServer(app);
   // install websocket subscriptions

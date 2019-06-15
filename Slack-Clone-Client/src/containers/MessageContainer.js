@@ -13,6 +13,7 @@ let unsubscribe = null;
 const Message = ({ message: { url, text, filetype } }) => {
   if (url) {
     if (filetype.startsWith('image/')) {
+      console.log('URLLSSSS', url);
       return <img className="file-message" src={url} alt="file uploaded" />;
     } if (filetype === 'text/plain') {
       return <RenderText url={url} />;

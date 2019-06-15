@@ -7,7 +7,7 @@ import { getMainDefinition } from 'apollo-utilities';
 import { createUploadLink } from 'apollo-upload-client';
 
 const httpLink = createUploadLink({
-  uri: 'http://localhost:4040/graphql',
+  uri: `http://${process.env.REACT_APP_SERVER_URL}/graphql`,
 });
 
 /** Extract our tokens from Headers that was sent by the server */
@@ -43,7 +43,7 @@ const httpLinkWithMiddleware = afterwareLink.concat(middlewareLink.concat(httpLi
 
 // Create a WebSocket link:
 export const wsLink = new WebSocketLink({
-  uri: 'ws://localhost:4040/graphql',
+  uri: `ws://${process.env.REACT_APP_SERVER_URL}/graphql`,
   options: {
     reconnect: true,
     connectionParams: () => ({

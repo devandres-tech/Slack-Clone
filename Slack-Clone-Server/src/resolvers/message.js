@@ -6,15 +6,15 @@ import mkdirp from 'mkdirp';
 import requiresAuth, { requiresTeamAccess } from '../permissions';
 import pubsub from '../pubsub';
 
-const UPLOAD_DIR = './file-uploads';
-// Ensure upload directory exists.
-mkdirp.sync(UPLOAD_DIR);
+// const UPLOAD_DIR = './file-uploads';
+// // Ensure upload directory exists.
+// mkdirp.sync(UPLOAD_DIR);
 
 const NEW_CHANNEL_MESSAGE = 'NEW_CHANNEL_MESSAGE';
 
 const storeFS = ({ stream, filename, mimetype }) => {
   const id = shortid.generate();
-  const url = `${UPLOAD_DIR}/${id}.${mimetype.slice(mimetype.indexOf('/') + 1)}`;
+  const url = `file-uploads/${id}.${mimetype.slice(mimetype.indexOf('/') + 1)}`;
   return new Promise((resolve, reject) =>
     stream
       .on('error', (error) => {
@@ -49,7 +49,7 @@ export default {
 
   Message: {
     // set url for static files
-    url: parent => (parent.url ? `${process.env.SERVER_URL} || http://localhost:4040/${parent.url}` : parent.url),
+    url: parent => (parent.url ? `${process.env.SERVER_URL}/${parent.url}` : parent.url),
     user: ({ user, userId }, args, { models }) => {
       if (user) {
         return user;
@@ -88,6 +88,7 @@ export default {
         const messageData = args;
         if (file) {
           const { url, filetype } = await processUpload(file);
+          console.log('URL BRO', url);
           messageData.url = url;
           messageData.filetype = filetype;
         }
