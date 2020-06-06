@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
-    "apollo-server-express": "^2.3.3",
+    "apollo-server-express": "^2.14.2",
     "bcrypt": "^3.0.3",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
