@@ -1,7 +1,5 @@
 # Slack Clone 
 
-Demo: http://heavy-eye.surge.sh/
-
 This project is a full stack web application. This is an attempt to clone Slack and some of its most used features. A real time chat service where users can create teams, private group chats, and upload files. Implemented custom authentication with JSON web tokens. Uses websockets to send messages in real time.
 Server was deployed to google cloud and is running in a docker container. Client was deployed to Surge.sh for static uploads. This is an open source project so please feel free to contribute!
 
